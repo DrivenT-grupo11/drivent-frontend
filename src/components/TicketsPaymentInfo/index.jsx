@@ -4,7 +4,6 @@ import styled from "styled-components";
 export default function TicketsPaymentInfo() {
   return (
     <>
-      <StyledTypography marginBottom={3.4} variant="h4">Ingresso e Pagamento</StyledTypography>
       <StyledTypography marginBottom={2} fontFamily={"Roboto, sans-serif"} color={"#8E8E8E"} paragraph={true}>Primeiro, escolha sua modalidade de ingresso</StyledTypography>
     </>
   );
