@@ -1,6 +1,6 @@
 import ChooseButton from "./Button.jsx";
 
-import ErrorWithoutSubscription from "./ErrorWithoutSubscription"; // waiting to implement a check whether the user signed up or not
+import ErrorWithoutSubscription from "./ErrorWithoutSubscription";
 import React, { useState , useEffect } from 'react'
 
 import { Typography } from "@mui/material";
