@@ -24,6 +24,7 @@ const Button = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 20px;
 `;
 
 const ButtonContent = styled.div`
@@ -40,6 +41,7 @@ const ButtonLabel = styled.p`
     line-height: 19px;
     letter-spacing: 0em;
     text-align: center;
+    color: #454545;
 `;
 
 const ButtonPrice = styled.p`
@@ -49,4 +51,5 @@ const ButtonPrice = styled.p`
     line-height: 16px;
     letter-spacing: 0em;
     text-align: center;
+    color: #898989;
 `;
