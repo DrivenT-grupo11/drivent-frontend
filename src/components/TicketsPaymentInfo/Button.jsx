@@ -1,13 +1,13 @@
 import styled from "styled-components";
 
-export default function ChooseButton({ label, price }) {
+export default function ChooseButton({ label, price, onClick, backgroundColor }) {
   return (
-    <Button>
+    <Button onClick={onClick} style={{ backgroundColor: backgroundColor }}>
       <ButtonContent>
         <ButtonLabel>{label}</ButtonLabel>
         {price && (
           <ButtonPrice>
-            {price}
+            R$ {price}
           </ButtonPrice>
         )}
       </ButtonContent>
@@ -25,6 +25,7 @@ const Button = styled.button`
   align-items: center;
   justify-content: center;
   margin: 20px;
+  cursor: pointer;
 `;
 
 const ButtonContent = styled.div`
