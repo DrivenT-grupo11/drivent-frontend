@@ -31,8 +31,8 @@ const StyledTypography = styled(Typography)`
 `;
 const ChooseModality = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: left;
-  justify-content: center;
-  
+  justify-content: left;
+
 `;
