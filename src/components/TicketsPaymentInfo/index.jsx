@@ -1,12 +1,18 @@
+import React, { useState , useEffect } from 'react';
 import { Typography } from "@mui/material";
 import styled from "styled-components";
-import ErrorWithoutSubscription from "./ErrorWithoutSubscription"; // waiting to implement a check whether the user signed up or not
+import ErrorWithoutSubscription from "./ErrorWithoutSubscription";
 
 export default function TicketsPaymentInfo() {
+  const EnrollmentLocalStorage = localStorage.getItem('EnrollmentData')
+
+  useEffect(() => {
+    
+  }, []);
+
   return (
     <>
-      {/* <ErrorWithoutSubscription /> //waiting to implement a check whether the user signed up or not */}
-      <StyledTypography marginBottom={2} fontFamily={"Roboto, sans-serif"} color={"#8E8E8E"} paragraph={true}>Primeiro, escolha sua modalidade de ingresso</StyledTypography>
+      {EnrollmentLocalStorage ? <StyledTypography marginBottom={2} fontFamily={"Roboto, sans-serif"} color={"#8E8E8E"} paragraph={true}>Primeiro, escolha sua modalidade de ingresso</StyledTypography> : <ErrorWithoutSubscription />}
     </>
   );
 }
