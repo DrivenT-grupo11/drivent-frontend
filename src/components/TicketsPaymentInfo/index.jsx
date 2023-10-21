@@ -2,13 +2,14 @@ import ChooseButton from "./Button.jsx";
 
 import ErrorWithoutSubscription from "./ErrorWithoutSubscription"; // waiting to implement a check whether the user signed up or not
 import React, { useState , useEffect } from 'react'
+import useEnrollment from '../../hooks/api/useEnrollment';
 
 import { Typography } from "@mui/material";
 import styled from "styled-components";
 
 export default function TicketsPaymentInfo() {
-  const EnrollmentLocalStorage = localStorage.getItem('EnrollmentData');
-
+  const enrollment = useEnrollment()
+  console.log(enrollment.enrollment)
   const [selectedOption1, setSelectedOption1] = useState(false);
   const [selectedOption3, setSelectedOption3] = useState(false);
 
@@ -90,11 +91,12 @@ export default function TicketsPaymentInfo() {
 
   return (
     <>     
-      {EnrollmentLocalStorage ? (
+      {enrollment.enrollment !== null ? (
         <StyledTypography marginBottom={2} fontFamily={"Roboto, sans-serif"} color={"#8E8E8E"} paragraph={true}>Primeiro, escolha sua modalidade de ingresso</StyledTypography>
       ) : (
         <ErrorWithoutSubscription />
       )}
+      { enrollment.enrollment !== null ? 
       <ChooseModality>
         {elementsArray.div1.map((element, i) => {
           return <>
@@ -107,7 +109,8 @@ export default function TicketsPaymentInfo() {
             />
           </>
         })}
-      </ChooseModality>
+      </ChooseModality> : null
+      }
       {selectedOption1 && 
         <>
           <StyledTypography marginBottom={2} fontFamily={"Roboto, sans-serif"} color={"#8E8E8E"} paragraph={true}>Ótimo! Agora escolha sua modalidade de hospedagem</StyledTypography>
