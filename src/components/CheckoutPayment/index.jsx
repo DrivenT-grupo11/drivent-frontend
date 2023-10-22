@@ -4,6 +4,7 @@ import Cards from "react-credit-cards-2";
 import 'react-credit-cards-2/dist/es/styles-compiled.css'
 import React, { useState } from "react";
 import TicketCard from "./TicketCard";
+import SuccessCheckout from "./SuccessCheckout";
 
 
 export default function CheckoutPayment() {
@@ -15,6 +16,7 @@ export default function CheckoutPayment() {
     focus: '',
   });
 
+  const [payment, setPayment] = useState(false);
 
   const handleInputChange = (evt) => {
     const { name, value } = evt.target;
@@ -28,7 +30,6 @@ export default function CheckoutPayment() {
 
   return (
     <>
-
       <Typography marginBottom={3.4} variant="h4">Ingresso e Pagamento</Typography>
       <ContainerMain>
         <h2>Ingresso escolhido</h2>
@@ -36,63 +37,68 @@ export default function CheckoutPayment() {
           <TicketCard />
         </TicketContainer>
         <h2>Pagamento</h2>
+        {payment !== true ?
+          <>
+            <CreditCard>
 
-        <CreditCard>
+              <Cards
+                number={state.number}
+                expiry={state.expiry}
+                cvc={state.cvc}
+                name={state.name}
+                focused={state.focus}
+              />
+              <form>
+                <div className="form-group">
+                  <input type="number"
+                    name="number"
+                    placeholder="Card Number"
+                    className="form-control"
+                    value={state.number}
+                    onChange={handleInputChange}
+                    onFocus={handleInputFocus} />
+                  <small>E.g.: 49..., 51..., 36..., 37...</small>
+                </div>
+                <div className="form-group">
+                  <input type="text"
+                    name="name"
+                    className="form-control"
+                    placeholder="Name"
+                    value={state.name}
+                    onChange={handleInputChange}
+                    onFocus={handleInputFocus} />
+                </div>
+                <div className="row">
+                  <div className="col-6">
+                    <input type="tel"
+                      name="expiry"
+                      placeholder="Valid thru"
+                      className="form-control"
+                      pattern="\d\d/\d\d"
+                      required
+                      value={state.expiry}
+                      onChange={handleInputChange}
+                      onFocus={handleInputFocus} />
+                  </div>
+                  <div className="col-6">
+                    <input type="tel"
+                      name="cvc"
+                      className="form-control"
+                      placeholder="CVC"
+                      pattern="\d{3,4}"
+                      required
+                      value={state.cvc}
+                      onChange={handleInputChange}
+                      onFocus={handleInputFocus} />
+                  </div>
+                </div>
+              </form>
+            </CreditCard>
+            <button onClick={() => setPayment(true)}>FINALIZAR PAGAMENTO</button>
+          </>
+          : <SuccessCheckout />}
 
-          <Cards
-            number={state.number}
-            expiry={state.expiry}
-            cvc={state.cvc}
-            name={state.name}
-            focused={state.focus}
-          />
-          <form>
-            <div className="form-group">
-              <input type="number"
-                name="number"
-                placeholder="Card Number"
-                className="form-control"
-                value={state.number}
-                onChange={handleInputChange}
-                onFocus={handleInputFocus} />
-              <small>E.g.: 49..., 51..., 36..., 37...</small>
-            </div>
-            <div className="form-group">
-              <input type="text"
-                name="name"
-                className="form-control"
-                placeholder="Name"
-                value={state.name}
-                onChange={handleInputChange}
-                onFocus={handleInputFocus} />
-            </div>
-            <div className="row">
-              <div className="col-6">
-                <input type="tel"
-                  name="expiry"
-                  placeholder="Valid thru"
-                  className="form-control"
-                  pattern="\d\d/\d\d"
-                  required
-                  value={state.expiry}
-                  onChange={handleInputChange}
-                  onFocus={handleInputFocus} />
-              </div>
-              <div className="col-6">
-                <input type="tel"
-                  name="cvc"
-                  className="form-control"
-                  placeholder="CVC"
-                  pattern="\d{3,4}"
-                  required
-                  value={state.cvc}
-                  onChange={handleInputChange}
-                  onFocus={handleInputFocus} />
-              </div>
-            </div>
-          </form>
-        </CreditCard>
-        <button type="submit">FINALIZAR PAGAMENTO</button>
+
       </ContainerMain>
     </>
   )
