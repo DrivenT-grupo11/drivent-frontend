@@ -1,11 +1,14 @@
+import { useContext } from "react"
 import styled from "styled-components"
+import PaymentContext from "../../contexts/PaymentContext"
 
 export default function TicketCard(){
+    const {priceTicket, hotelTicket, typeTicket} = useContext(PaymentContext)
     return (
         <>
             <CardContainer>
-                <h4>Presencial + Com Hotel</h4>
-                <h3>R$600</h3>
+                <h4>{typeTicket} {hotelTicket ? '+ Com Hotel' : ''}</h4>
+                <h3>R${priceTicket}</h3>
             </CardContainer>
         </>
     )

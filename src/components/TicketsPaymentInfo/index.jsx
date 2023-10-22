@@ -1,18 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import useEnrollment from '../../hooks/api/useEnrollment';
 import { Typography } from "@mui/material";
 import styled from "styled-components";
 import ChooseButton from "./Button.jsx";
 import ErrorWithoutSubscription from "./ErrorWithoutSubscription";
+import { useNavigate } from 'react-router-dom';
+import PaymentContext from '../../contexts/PaymentContext';
 
 export default function TicketsPaymentInfo() {
   const enrollment = useEnrollment();
+  const { setPriceTicket, setHotelTicket, setTypeTicket } = useContext(PaymentContext)
   const [selectedOption1, setSelectedOption1] = useState(false);
   const [selectedOption3, setSelectedOption3] = useState(false);
   const [selectedOption2, setSelectedOption2] = useState(false);
   const [selectedOption4, setSelectedOption4] = useState(false);
   const [showReserveButton, setShowReserveButton] = useState(false);
   const [total, setTotal] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     let calculatedPrice = 0;
@@ -27,19 +31,19 @@ export default function TicketsPaymentInfo() {
       calculatedPrice += 0;
     }
     setTotal(calculatedPrice);
-
+    setPriceTicket(calculatedPrice);
   }, [selectedOption1, selectedOption2, selectedOption3, selectedOption4]);
 
   const handleOptionClick1 = () => {
-    
+
     if (selectedOption3 && !selectedOption1) {
       setSelectedOption3(false);
       setSelectedOption1(true);
     } else if (!selectedOption3 && !selectedOption1) {
       setSelectedOption1(true);
-      } else if (selectedOption1 && !selectedOption3) {
+    } else if (selectedOption1 && !selectedOption3) {
       setSelectedOption1(false);
-      setShowReserveButton(false); 
+      setShowReserveButton(false);
     }
   };
   const handleOptionClick3 = () => {
@@ -50,7 +54,7 @@ export default function TicketsPaymentInfo() {
     } else if (!selectedOption3 && !selectedOption1) {
       setSelectedOption3(true);
       setShowReserveButton(true);
-      } else {
+    } else {
       setSelectedOption3(false);
       setShowReserveButton(false);
     }
@@ -60,26 +64,26 @@ export default function TicketsPaymentInfo() {
     if (!selectedOption2 && selectedOption4) {
       setSelectedOption2(true);
       setSelectedOption4(false);
-      setShowReserveButton(true); 
+      setShowReserveButton(true);
     } else if (!selectedOption2 && !selectedOption4) {
       setSelectedOption2(true);
-      setShowReserveButton(true); 
+      setShowReserveButton(true);
     } else {
       setSelectedOption2(false);
-      setShowReserveButton(false); 
+      setShowReserveButton(false);
     }
   };
   const handleOptionClick4 = () => {
     if (selectedOption2 && !selectedOption4) {
       setSelectedOption2(false);
       setSelectedOption4(true);
-      setShowReserveButton(true); 
+      setShowReserveButton(true);
     } else if (!selectedOption2 && !selectedOption4) {
       setSelectedOption4(true);
-      setShowReserveButton(true); 
+      setShowReserveButton(true);
     } else {
       setSelectedOption4(false);
-      setShowReserveButton(false); 
+      setShowReserveButton(false);
     }
   };
 
@@ -129,7 +133,13 @@ export default function TicketsPaymentInfo() {
                 key={i}
                 label={element.label}
                 price={element.price}
-                onClick={element.onClick}
+                onClick={() => {
+                  element.onClick()
+                  setTypeTicket(element.label)
+                  if (element.label === 'Online') {
+                    setHotelTicket(false)
+                  }
+                }}
                 backgroundColor={element.backgroundColor}
               />
             )
@@ -146,7 +156,10 @@ export default function TicketsPaymentInfo() {
                   key={i}
                   label={element.label}
                   price={element.price}
-                  onClick={element.onClick}
+                  onClick={() => {
+                    element.onClick()
+                    setHotelTicket(element.label === "Com hotel" ? true : false)
+                  }}
                   backgroundColor={element.backgroundColor}
                 />
               )
@@ -156,11 +169,11 @@ export default function TicketsPaymentInfo() {
       }
       {showReserveButton && (
         <Container>
-          <StyledTypography marginBottom={2} fontFamily={"Roboto, sans-serif"} 
-          color={"#8E8E8E"} paragraph={true}>
-            Fechado! O total ficou em <strong>R$ {total} </strong>. Agora é só confirmar: 
-            </StyledTypography>
-          <Reservation>
+          <StyledTypography marginBottom={2} fontFamily={"Roboto, sans-serif"}
+            color={"#8E8E8E"} paragraph={true}>
+            Fechado! O total ficou em <strong>R$ {total}</strong>. Agora é só confirmar:
+          </StyledTypography>
+          <Reservation onClick={() => navigate('/dashboard/payment/checkout')}>
             <h1>RESERVAR INGRESSO</h1>
           </Reservation>
         </Container>
