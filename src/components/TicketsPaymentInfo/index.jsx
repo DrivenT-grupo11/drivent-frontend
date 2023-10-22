@@ -4,8 +4,6 @@ import { Typography } from "@mui/material";
 import styled from "styled-components";
 import ChooseButton from "./Button.jsx";
 import ErrorWithoutSubscription from "./ErrorWithoutSubscription";
-import { set } from 'date-fns';
-
 
 export default function TicketsPaymentInfo() {
   const enrollment = useEnrollment();
@@ -16,7 +14,6 @@ export default function TicketsPaymentInfo() {
   const [showReserveButton, setShowReserveButton] = useState(false);
   const [total, setTotal] = useState(0);
 
-  
   useEffect(() => {
     let calculatedPrice = 0;
     if (selectedOption1) {
@@ -38,10 +35,8 @@ export default function TicketsPaymentInfo() {
     if (selectedOption3 && !selectedOption1) {
       setSelectedOption3(false);
       setSelectedOption1(true);
-      setShowReserveButton(true);
     } else if (!selectedOption3 && !selectedOption1) {
       setSelectedOption1(true);
-      setShowReserveButton(true);
       } else if (selectedOption1 && !selectedOption3) {
       setSelectedOption1(false);
       setShowReserveButton(false); 
@@ -189,11 +184,8 @@ const Reservation = styled.button`
     line-height: 16px;
     letter-spacing: 0em;
     text-align: center;
-
   }
-
 `
-
 const StyledTypography = styled(Typography)`
   /* margin-bottom: 20px!important; */
 `;
