@@ -23,7 +23,7 @@ export function blockedBookingMessage(error) {
 export function getHotelCapacity(rooms) {
   let capacity = 0;
   let reserved = 0;
-  console.log(rooms[0])
+  //console.log(rooms[0])
   rooms.forEach((room) => {
     capacity += room.capacity;
     if(room.Booking){

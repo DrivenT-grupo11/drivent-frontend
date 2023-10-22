@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { HotelsContainer } from './HotelsContainer';
 import HotelCard from './HotelCard';
 
-export default function HotelListing({ hotelList, selectedHotel, setSelectedHotel }) {
+export default function HotelListing({ hotelList, selectedHotel, setSelectedHotel, setSelectedRoom }) {
   const [hotels, setHotels] = useState(false);
 
   useEffect(() => {
@@ -14,7 +14,7 @@ export default function HotelListing({ hotelList, selectedHotel, setSelectedHote
   function renderHotelList (){
     if(hotels) {
       return hotels.map((hotel) => (
-        <HotelCard key={hotel.id} hotel={hotel} setSelectedHotel={setSelectedHotel} selectedHotel={selectedHotel}/>
+        <HotelCard key={hotel.id} hotel={hotel} setSelectedHotel={setSelectedHotel} selectedHotel={selectedHotel} setSelectedRoom={setSelectedRoom}/>
       ));
     } else {
       return <StyledTypography variant='h5' color='textSecondary'>Carregando...</ StyledTypography>;  
