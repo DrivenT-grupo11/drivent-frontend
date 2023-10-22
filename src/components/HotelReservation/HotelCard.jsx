@@ -3,11 +3,11 @@ import useHotelDetails from '../../hooks/api/useHotelDetails';
 import { useEffect, useState } from 'react';
 import { getHotelCapacity, getRoomTypes } from './hotelUtils';
 
-export default function HotelCard({ hotel, setSelectedHotel, selectedHotel }) {
-  const { hotelDetails, getHotelDetails } = useHotelDetails(hotel.id);
+export default function HotelCard({ hotel, setSelectedHotel, selectedHotel, setSelectedRoom }) {
+  const { hotelDetails } = useHotelDetails(hotel.id);
   const [emptyVacancy, setEmptyVacancy] = useState('Carregando');
   const [roomTypes, setRoomTypes] = useState('Carregando');
-  console.log(hotelDetails)
+
 
   useEffect(() => {
     if (hotelDetails) {
@@ -17,8 +17,12 @@ export default function HotelCard({ hotel, setSelectedHotel, selectedHotel }) {
   }, [hotelDetails]);
 
   function selectCard() {
+    console.log('Clicou no cartão:', hotel.id);
     setSelectedHotel(hotelDetails);
-    getHotelDetails();
+    
+    if (selectedHotel && hotel.id !== selectedHotel.id) {
+      setSelectedRoom(null);
+    }
   };
 
   const cardColor = () => {
