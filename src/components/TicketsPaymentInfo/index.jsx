@@ -48,7 +48,7 @@ export default function TicketsPaymentInfo() {
 
   const selectedType = async () => {
     if(selectedOption1){
-      setSelectedOption(false)
+      setSelectedOption(false);
     }  else if (selectedOption3){
       setSelectedOption(true)
       setName('Online');
@@ -66,16 +66,19 @@ export default function TicketsPaymentInfo() {
       isRemote: selectedOption,
       includesHotel: selectedOptionHotel,
     };
-    
     setTicketType(selectedTicketType);
-    console.log('Conteúdo do contexto ticketType:', ticketType);
+       
     try {
       const response = await axios.post('/tickets/types', selectedTicketType, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(response);
+      setTicketType({
+        ...selectedTicketType,
+        id: response.data.id,
+      });
+      console.log(se)
     } catch (error) {
       console.log(error);
     }
