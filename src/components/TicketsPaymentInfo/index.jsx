@@ -22,9 +22,6 @@ export default function TicketsPaymentInfo() {
   const [selectedOption2, setSelectedOption2] = useState(false);
   const [selectedOption4, setSelectedOption4] = useState(false);
   const [showReserveButton, setShowReserveButton] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(false); 
-  const [selectedOptionHotel, setSelectedOptionHotel] = useState(false);
-  const [name, setName] = useState('');
   const [total, setTotal] = useState(0);
   const token = useToken();
   const navigate = useNavigate();
@@ -51,19 +48,13 @@ export default function TicketsPaymentInfo() {
   
   const selectedType = async () => {
     let id;
-    if(selectedOption1){
-      setSelectedOption(false);
-    }  else if (selectedOption3){
-      setSelectedOption(true)
-      id = 3;
-      setTicketType(3)
-    }
-    if(selectedOption2){
-      setSelectedOptionHotel(true)
-      setTicketType(1)
+   if (selectedOption3){
       id = 1;
+      setTicketType(1)
+    } else if(selectedOption2){
+      setTicketType(3)
+      id = 3;
     } else if (selectedOption4){
-      setSelectedOptionHotel(false)
       setTicketType(2)
       id = 2;
     }
