@@ -7,10 +7,15 @@ import ErrorWithoutSubscription from "./ErrorWithoutSubscription";
 import axios from 'axios';
 import useToken from '../../hooks/useToken';
 import UserContext from '../../contexts/UserContext';
-
 export default function TicketsPaymentInfo() {
   const enrollment = useEnrollment();
   const {userData} = useContext(UserContext)
+import { useNavigate } from 'react-router-dom';
+import PaymentContext from '../../contexts/PaymentContext';
+
+export default function TicketsPaymentInfo() {
+  const enrollment = useEnrollment();
+  const { setPriceTicket, setHotelTicket, setTypeTicket } = useContext(PaymentContext)
   const [selectedOption1, setSelectedOption1] = useState(false);
   const [selectedOption3, setSelectedOption3] = useState(false);
   const [selectedOption2, setSelectedOption2] = useState(false);
@@ -21,6 +26,7 @@ export default function TicketsPaymentInfo() {
   const [name, setName] = useState('');
   const [total, setTotal] = useState(0);
   const token = useToken();
+  const navigate = useNavigate();
 
   axios.defaults.baseURL = `${import.meta.env.VITE_API_URL}`;
   
@@ -37,7 +43,7 @@ export default function TicketsPaymentInfo() {
       calculatedPrice += 0;
     }
     setTotal(calculatedPrice);
-
+    setPriceTicket(calculatedPrice);
   }, [selectedOption1, selectedOption2, selectedOption3, selectedOption4]);
 
   const selectedType = async () => {
@@ -74,15 +80,15 @@ export default function TicketsPaymentInfo() {
     } 
   }
   const handleOptionClick1 = () => {
-    
+
     if (selectedOption3 && !selectedOption1) {
       setSelectedOption3(false);
       setSelectedOption1(true);
     } else if (!selectedOption3 && !selectedOption1) {
       setSelectedOption1(true);
-      } else if (selectedOption1 && !selectedOption3) {
+    } else if (selectedOption1 && !selectedOption3) {
       setSelectedOption1(false);
-      setShowReserveButton(false); 
+      setShowReserveButton(false);
     }
   };
   const handleOptionClick3 = () => {
@@ -93,7 +99,7 @@ export default function TicketsPaymentInfo() {
     } else if (!selectedOption3 && !selectedOption1) {
       setSelectedOption3(true);
       setShowReserveButton(true);
-      } else {
+    } else {
       setSelectedOption3(false);
       setShowReserveButton(false);
     }
@@ -102,26 +108,26 @@ export default function TicketsPaymentInfo() {
     if (!selectedOption2 && selectedOption4) {
       setSelectedOption2(true);
       setSelectedOption4(false);
-      setShowReserveButton(true); 
+      setShowReserveButton(true);
     } else if (!selectedOption2 && !selectedOption4) {
       setSelectedOption2(true);
-      setShowReserveButton(true); 
+      setShowReserveButton(true);
     } else {
       setSelectedOption2(false);
-      setShowReserveButton(false); 
+      setShowReserveButton(false);
     }
   };
   const handleOptionClick4 = () => {
     if (selectedOption2 && !selectedOption4) {
       setSelectedOption2(false);
       setSelectedOption4(true);
-      setShowReserveButton(true); 
+      setShowReserveButton(true);
     } else if (!selectedOption2 && !selectedOption4) {
       setSelectedOption4(true);
-      setShowReserveButton(true); 
+      setShowReserveButton(true);
     } else {
       setSelectedOption4(false);
-      setShowReserveButton(false); 
+      setShowReserveButton(false);
     }
   };
 
@@ -171,7 +177,13 @@ export default function TicketsPaymentInfo() {
                 key={i}
                 label={element.label}
                 price={element.price}
-                onClick={element.onClick}
+                onClick={() => {
+                  element.onClick()
+                  setTypeTicket(element.label)
+                  if (element.label === 'Online') {
+                    setHotelTicket(false)
+                  }
+                }}
                 backgroundColor={element.backgroundColor}
               />
             )
@@ -188,7 +200,10 @@ export default function TicketsPaymentInfo() {
                   key={i}
                   label={element.label}
                   price={element.price}
-                  onClick={element.onClick}
+                  onClick={() => {
+                    element.onClick()
+                    setHotelTicket(element.label === "Com hotel" ? true : false)
+                  }}
                   backgroundColor={element.backgroundColor}
                 />
               )

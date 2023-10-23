@@ -2,10 +2,15 @@ import { Typography } from "@mui/material";
 import styled from "styled-components";
 import Cards from "react-credit-cards-2";
 import 'react-credit-cards-2/dist/es/styles-compiled.css'
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import TicketCard from "./TicketCard";
 import SuccessCheckout from "./SuccessCheckout";
+import useToken from "../../hooks/useToken";
+import { toast } from "react-toastify";
+import axios from "axios";
+import UserContext from "../../contexts/UserContext";
 
+axios.defaults.baseURL = `${import.meta.env.VITE_API_URL}`;
 
 export default function CheckoutPayment() {
   const [state, setState] = useState({
@@ -15,9 +20,14 @@ export default function CheckoutPayment() {
     name: '',
     focus: '',
   });
-
+  const {userData} = useContext(UserContext)
+  const [cardNumber, setCardNumber] = useState('');
+  const [cardName, setCardName] = useState('');
+  const [cardCVC, setCardCVC] = useState('');
+  const [cardExpiry, setCardExpiry] = useState('');
+  const token = useToken();
   const [payment, setPayment] = useState(false);
-
+ console.log(token)
   const handleInputChange = (evt) => {
     const { name, value } = evt.target;
 
@@ -28,6 +38,33 @@ export default function CheckoutPayment() {
     setState((prev) => ({ ...prev, focus: evt.target.name }));
   }
 
+  async function handleProccess(e){
+    e.preventDefault()
+    console.log(userData,'userdata')
+    const id = 1;
+    const body = [id, {
+      issuer: userData.user.email,
+      number: cardNumber,
+      name: cardName,
+      expirationDate: cardExpiry,
+      cvv: cardCVC
+    }]
+    console.log('toaqui')
+    
+    try {
+      const response = await axios.post('/process', body, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      });
+      setPayment(true);
+      toast('Pagamento realizado com sucesso')
+    } catch (error) {
+      toast('Falha no pagamento, verifique os dados')
+      console.log(error)
+    }
+
+  }
   return (
     <>
       <Typography marginBottom={3.4} variant="h4">Ingresso e Pagamento</Typography>
@@ -48,14 +85,19 @@ export default function CheckoutPayment() {
                 name={state.name}
                 focused={state.focus}
               />
-              <form>
+              <form onSubmit={handleProccess}>
                 <div className="form-group">
                   <input type="number"
                     name="number"
                     placeholder="Card Number"
                     className="form-control"
+                    maxlength="16"
+                    pattern="[\d| ]{16}"
+                    required
                     value={state.number}
-                    onChange={handleInputChange}
+                    onChange={(e) => {
+                      handleInputChange(e)
+                      setCardNumber(e.target.value)}}
                     onFocus={handleInputFocus} />
                   <small>E.g.: 49..., 51..., 36..., 37...</small>
                 </div>
@@ -64,8 +106,11 @@ export default function CheckoutPayment() {
                     name="name"
                     className="form-control"
                     placeholder="Name"
+                    required
                     value={state.name}
-                    onChange={handleInputChange}
+                    onChange={(e) => {
+                      handleInputChange(e)
+                      setCardName(e.target.value)}}
                     onFocus={handleInputFocus} />
                 </div>
                 <div className="row">
@@ -75,9 +120,12 @@ export default function CheckoutPayment() {
                       placeholder="Valid thru"
                       className="form-control"
                       pattern="\d\d/\d\d"
+                      maxLength="5"
                       required
                       value={state.expiry}
-                      onChange={handleInputChange}
+                      onChange={(e) => {
+                        handleInputChange(e)
+                        setCardExpiry(e.target.value)}}
                       onFocus={handleInputFocus} />
                   </div>
                   <div className="col-6">
@@ -85,16 +133,19 @@ export default function CheckoutPayment() {
                       name="cvc"
                       className="form-control"
                       placeholder="CVC"
+                      maxLength="3"
                       pattern="\d{3,4}"
                       required
                       value={state.cvc}
-                      onChange={handleInputChange}
+                      onChange={(e) => {
+                        handleInputChange(e)
+                        setCardCVC(e.target.value)}}
                       onFocus={handleInputFocus} />
                   </div>
                 </div>
               </form>
             </CreditCard>
-            <button onClick={() => setPayment(true)}>FINALIZAR PAGAMENTO</button>
+            <button type="submit" onClick={handleProccess}>FINALIZAR PAGAMENTO</button>
           </>
           : <SuccessCheckout />}
 
