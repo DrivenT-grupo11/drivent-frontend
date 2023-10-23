@@ -1,9 +1,15 @@
-import React, { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState } from 'react';
 
 const TicketTypeContext = createContext();
 
 export function TicketTypeProvider({ children }) {
-  const [ticketType, setTicketType] = useState({}); 
+  const [ticketType, setTicketType] = useState({
+    name: null,
+    price: 0,
+    isRemote: false,
+    includesHotel: false,
+    id: null,
+  });
 
   return (
     <TicketTypeContext.Provider value={{ ticketType, setTicketType }}>
