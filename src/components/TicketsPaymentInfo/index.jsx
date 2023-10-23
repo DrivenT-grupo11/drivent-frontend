@@ -1,19 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import useEnrollment from '../../hooks/api/useEnrollment';
 import { Typography } from "@mui/material";
 import styled from "styled-components";
 import ChooseButton from "./Button.jsx";
 import ErrorWithoutSubscription from "./ErrorWithoutSubscription";
+import axios from 'axios';
+import useToken from '../../hooks/useToken';
+import UserContext from '../../contexts/UserContext';
 
 export default function TicketsPaymentInfo() {
   const enrollment = useEnrollment();
+  const {userData} = useContext(UserContext)
   const [selectedOption1, setSelectedOption1] = useState(false);
   const [selectedOption3, setSelectedOption3] = useState(false);
   const [selectedOption2, setSelectedOption2] = useState(false);
   const [selectedOption4, setSelectedOption4] = useState(false);
   const [showReserveButton, setShowReserveButton] = useState(false);
+  const [selectedOption, setSelectedOption] = useState(false); 
+  const [selectedOptionHotel, setSelectedOptionHotel] = useState(false);
+  const [name, setName] = useState('');
   const [total, setTotal] = useState(0);
+  const token = useToken();
 
+  axios.defaults.baseURL = `${import.meta.env.VITE_API_URL}`;
+  
   useEffect(() => {
     let calculatedPrice = 0;
     if (selectedOption1) {
@@ -30,6 +40,39 @@ export default function TicketsPaymentInfo() {
 
   }, [selectedOption1, selectedOption2, selectedOption3, selectedOption4]);
 
+  const selectedType = async () => {
+    if(selectedOption1){
+      setSelectedOption(false)
+    }  else if (selectedOption3){
+      setSelectedOption(true)
+      setName('Online');
+    }
+    if(selectedOption2){
+      setSelectedOptionHotel(true)
+      setName('Presencial com hotel');
+    } else if (selectedOption4){
+      setSelectedOptionHotel(false)
+      setName('Presencial sem hotel');
+    }
+    console.log(token);
+    try {
+
+      const response = await axios.post('/tickets/types', {
+        name: name,
+        price: total,
+        isRemote: selectedOption, 
+        includesHotel: selectedOptionHotel, 
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      });
+      console.log(response);
+    }
+    catch (error) {
+      console.log(error);
+    } 
+  }
   const handleOptionClick1 = () => {
     
     if (selectedOption3 && !selectedOption1) {
@@ -55,7 +98,6 @@ export default function TicketsPaymentInfo() {
       setShowReserveButton(false);
     }
   };
-
   const handleOptionClick2 = () => {
     if (!selectedOption2 && selectedOption4) {
       setSelectedOption2(true);
@@ -161,7 +203,7 @@ export default function TicketsPaymentInfo() {
             Fechado! O total ficou em <strong>R$ {total} </strong>. Agora é só confirmar: 
             </StyledTypography>
           <Reservation>
-            <h1>RESERVAR INGRESSO</h1>
+            <h1 onClick={selectedType}>RESERVAR INGRESSO</h1>
           </Reservation>
         </Container>
       )}
