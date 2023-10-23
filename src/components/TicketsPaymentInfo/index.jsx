@@ -9,10 +9,12 @@ import useToken from '../../hooks/useToken';
 import UserContext from '../../contexts/UserContext';
 import { useNavigate } from 'react-router-dom';
 import PaymentContext from '../../contexts/PaymentContext';
+import { useTicketType } from '../../contexts/TicketTypeContext';
 
 export default function TicketsPaymentInfo() {
   const enrollment = useEnrollment();
   const {userData} = useContext(UserContext);
+  const { ticketType, setTicketType } = useTicketType();
   const { setPriceTicket, setHotelTicket, setTypeTicket } = useContext(PaymentContext)
   const [selectedOption1, setSelectedOption1] = useState(false);
   const [selectedOption3, setSelectedOption3] = useState(false);
@@ -58,24 +60,26 @@ export default function TicketsPaymentInfo() {
       setSelectedOptionHotel(false)
       setName('Presencial sem hotel');
     }
-    console.log(token);
+    const selectedTicketType = {
+      name: name,
+      price: total,
+      isRemote: selectedOption,
+      includesHotel: selectedOptionHotel,
+    };
+    
+    setTicketType(selectedTicketType);
+    console.log('Conteúdo do contexto ticketType:', ticketType);
     try {
-
-      const response = await axios.post('/tickets/types', {
-        name: name,
-        price: total,
-        isRemote: selectedOption, 
-        includesHotel: selectedOptionHotel, 
-      }, {
+      const response = await axios.post('/tickets/types', selectedTicketType, {
         headers: {
           Authorization: `Bearer ${token}`,
-        }
+        },
       });
       console.log(response);
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error);
-    } 
+    }
+ 
   }
   const handleOptionClick1 = () => {
 
