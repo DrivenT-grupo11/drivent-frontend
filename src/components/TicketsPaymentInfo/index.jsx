@@ -10,6 +10,7 @@ import UserContext from '../../contexts/UserContext';
 export default function TicketsPaymentInfo() {
   const enrollment = useEnrollment();
   const {userData} = useContext(UserContext)
+}
 import { useNavigate } from 'react-router-dom';
 import PaymentContext from '../../contexts/PaymentContext';
 
