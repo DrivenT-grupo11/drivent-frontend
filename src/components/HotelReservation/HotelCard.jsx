@@ -10,15 +10,17 @@ export default function HotelCard({ hotel, setSelectedHotel, selectedHotel, setS
 
 
   useEffect(() => {
-    if (hotelDetails) {
-      setEmptyVacancy(getHotelCapacity(hotelDetails.Rooms));
-      setRoomTypes(getRoomTypes(hotelDetails.Rooms));
+    if (hotel) {
+      setEmptyVacancy(getHotelCapacity(hotel.Rooms));
+      setRoomTypes(getRoomTypes(hotel.Rooms));
     }
-  }, [hotelDetails]);
+  }, [hotel]);
 
   function selectCard() {
-    console.log('Clicou no cartão:', hotel.id);
-    setSelectedHotel(hotelDetails);
+    console.log('Clicou no cartão:', hotel);
+    console.log("Hotel:", hotelDetails)
+    setSelectedHotel(hotel);
+    console.log("selected", selectedHotel)
     
     if (selectedHotel && hotel.id !== selectedHotel.id) {
       setSelectedRoom(null);
