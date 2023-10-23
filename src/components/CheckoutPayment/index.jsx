@@ -123,7 +123,7 @@ export default function CheckoutPayment() {
                     <input type="tel"
                       name="expiry"
                       placeholder="Valid thru"
-                      className="form-control"
+                      className="form-expiry"
                       pattern="\d\d/\d\d"
                       maxLength="5"
                       required
@@ -132,8 +132,7 @@ export default function CheckoutPayment() {
                         handleInputChange(e)
                         setCardExpiry(e.target.value)}}
                       onFocus={handleInputFocus} />
-                  </div>
-                  <div className="col-6">
+                  
                     <input type="tel"
                       name="cvc"
                       className="form-control"
@@ -192,7 +191,9 @@ const CreditCard = styled.div`
   form{
     input {
       width: 300px;
-      
+      height: 35px;
+      border-radius: 7px;
+      border-color: grey;
     }
     small {
       color: #8E8E8E;
@@ -212,8 +213,14 @@ const CreditCard = styled.div`
     }
     .col-6{
       display: flex;
-      width: 40%;
-      
+      width: 100%;
+      justify-content: space-between;
+      .form-expiry{
+          width: 65%;
+        }
+        .form-control{
+          width: 30%;
+        }
     }
   }
   

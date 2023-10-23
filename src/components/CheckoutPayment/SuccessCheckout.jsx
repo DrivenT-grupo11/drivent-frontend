@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 
@@ -10,7 +11,7 @@ export default function SuccessCheckout() {
             <ion-icon name="checkmark-circle"></ion-icon>
             <div>
                 <span>Pagamento Confirmado!</span>
-                <h3>Prossiga para escolha de hospedagem e atividades</h3>
+              <Link to='/dashboard/hotel'> <h3>Prossiga para escolha de hospedagem e atividades</h3></Link>
             </div>
         </ContainerSuccess>
 
