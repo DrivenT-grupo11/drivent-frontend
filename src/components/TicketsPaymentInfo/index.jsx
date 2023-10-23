@@ -10,11 +10,12 @@ import UserContext from '../../contexts/UserContext';
 import { useNavigate } from 'react-router-dom';
 import PaymentContext from '../../contexts/PaymentContext';
 import { useTicketType } from '../../contexts/TicketTypeContext';
+import { toast } from 'react-toastify';
 
 export default function TicketsPaymentInfo() {
   const enrollment = useEnrollment();
   const {userData} = useContext(UserContext);
-  const { ticketType, setTicketType } = useTicketType();
+  const { ticketType, setTicketType,ticketId, setTicketId } = useTicketType();
   const { setPriceTicket, setHotelTicket, setTypeTicket } = useContext(PaymentContext)
   const [selectedOption1, setSelectedOption1] = useState(false);
   const [selectedOption3, setSelectedOption3] = useState(false);
@@ -42,43 +43,40 @@ export default function TicketsPaymentInfo() {
     } else if (selectedOption4) {
       calculatedPrice += 0;
     }
+    
     setTotal(calculatedPrice);
     setPriceTicket(calculatedPrice);
+   
   }, [selectedOption1, selectedOption2, selectedOption3, selectedOption4]);
-
+  
   const selectedType = async () => {
+    let id;
     if(selectedOption1){
       setSelectedOption(false);
     }  else if (selectedOption3){
       setSelectedOption(true)
-      setName('Online');
+      id = 3;
+      setTicketType(3)
     }
     if(selectedOption2){
       setSelectedOptionHotel(true)
-      setName('Presencial com hotel');
+      setTicketType(1)
+      id = 1;
     } else if (selectedOption4){
       setSelectedOptionHotel(false)
-      setName('Presencial sem hotel');
+      setTicketType(2)
+      id = 2;
     }
-    const selectedTicketType = {
-      name: name,
-      price: total,
-      isRemote: selectedOption,
-      includesHotel: selectedOptionHotel,
-    };
-    setTicketType(selectedTicketType);
-       
     try {
-      const response = await axios.post('/tickets/types', selectedTicketType, {
+      const response = await axios.post('/tickets', {ticketTypeId: id}, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      setTicketType({
-        ...selectedTicketType,
-        id: response.data.id,
-      });
-      console.log(se)
+      toast('Ticket criado')
+      navigate('/dashboard/payment/checkout')
+      setTicketId(response.data.id)
+      console.log(response.data)
     } catch (error) {
       console.log(error);
     }

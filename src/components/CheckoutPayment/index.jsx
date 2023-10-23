@@ -9,10 +9,15 @@ import useToken from "../../hooks/useToken";
 import { toast } from "react-toastify";
 import axios from "axios";
 import UserContext from "../../contexts/UserContext";
+import { useTicketType } from "../../contexts/TicketTypeContext";
+import EnrollmentContext from "../../contexts/EnrollmentContext";
 
 axios.defaults.baseURL = `${import.meta.env.VITE_API_URL}`;
 
 export default function CheckoutPayment() {
+  const {EnrollmentData} = useContext(EnrollmentContext);
+  
+  console.log(EnrollmentData, 'enrollment')
   const [state, setState] = useState({
     number: '',
     expiry: '',
@@ -25,9 +30,10 @@ export default function CheckoutPayment() {
   const [cardName, setCardName] = useState('');
   const [cardCVC, setCardCVC] = useState('');
   const [cardExpiry, setCardExpiry] = useState('');
+  const {ticketId} = useTicketType();
   const token = useToken();
   const [payment, setPayment] = useState(false);
- console.log(token)
+ 
   const handleInputChange = (evt) => {
     const { name, value } = evt.target;
 
@@ -40,19 +46,18 @@ export default function CheckoutPayment() {
 
   async function handleProccess(e){
     e.preventDefault()
-    console.log(userData,'userdata')
-    const id = 1;
-    const body = [id, {
-      issuer: userData.user.email,
+    const body = {ticketId: ticketId, 
+      cardData: {
+      issuer: cardName,
       number: cardNumber,
-      name: cardName,
+      name: EnrollmentData.name,
       expirationDate: cardExpiry,
       cvv: cardCVC
-    }]
-    console.log('toaqui')
+    }}
     
+    console.log(body)
     try {
-      const response = await axios.post('/process', body, {
+      const response = await axios.post('/payments/process', body, {
         headers: {
           Authorization: `Bearer ${token}`,
         }
