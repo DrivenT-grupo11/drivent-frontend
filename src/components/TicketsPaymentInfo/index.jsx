@@ -7,15 +7,12 @@ import ErrorWithoutSubscription from "./ErrorWithoutSubscription";
 import axios from 'axios';
 import useToken from '../../hooks/useToken';
 import UserContext from '../../contexts/UserContext';
-export default function TicketsPaymentInfo() {
-  const enrollment = useEnrollment();
-  const {userData} = useContext(UserContext)
-}
 import { useNavigate } from 'react-router-dom';
 import PaymentContext from '../../contexts/PaymentContext';
 
 export default function TicketsPaymentInfo() {
   const enrollment = useEnrollment();
+  const {userData} = useContext(UserContext);
   const { setPriceTicket, setHotelTicket, setTypeTicket } = useContext(PaymentContext)
   const [selectedOption1, setSelectedOption1] = useState(false);
   const [selectedOption3, setSelectedOption3] = useState(false);
