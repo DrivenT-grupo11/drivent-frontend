@@ -20,14 +20,17 @@ import { useEffect } from 'react';
 
 async function holder() {
     const token = localStorage.getItem("token")
+
+    const header =  {
+      'Authorization': `Bearer ${token}`
+    }
+
       const response = await axios.get("http://localhost:4000/auth/gitprofile", {
-        Authorization: `Bearer ${token}`
+        headers: header
         
       })
-  
+      console.log(response.data)
       const user = response.data;
-      console.log(user)
-      alert(user)
 
 }
 

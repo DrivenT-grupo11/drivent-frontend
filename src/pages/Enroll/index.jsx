@@ -20,7 +20,6 @@ import axios from 'axios';
 window.onload = async () => {
   const urlParams = new URLSearchParams(window.location.search);
   const code = urlParams.get("code");
-  alert(code)
   if(code){
     try {
       const response = await axios.post(`http://localhost:4000/auth/login-git`, {code});
@@ -30,7 +29,7 @@ window.onload = async () => {
       console.log(error)
     }
   } else {
-    console.log("pão")
+
   }
 }
 

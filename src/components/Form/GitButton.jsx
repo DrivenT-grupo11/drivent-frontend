@@ -12,7 +12,6 @@ import React from 'react';
           state: 't10'
         })
         const authURL = `${url}?${params.toString()}`;
-        alert(authURL)
         window.location.href = authURL;
       }
   
