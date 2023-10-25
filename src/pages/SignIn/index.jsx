@@ -1,7 +1,7 @@
 import { useState, useContext } from 'react';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-
+import axios from 'axios';
 import AuthLayout from '../../layouts/Auth';
 
 import Input from '../../components/Form/Input';
@@ -13,8 +13,30 @@ import EventInfoContext from '../../contexts/EventInfoContext';
 import UserContext from '../../contexts/UserContext';
 
 import useSignIn from '../../hooks/api/useSignIn';
+import { useEffect } from 'react';
+
+
+
+
+async function holder() {
+    const token = localStorage.getItem("token")
+      const response = await axios.get("http://localhost:4000/auth/gitprofile", {
+        Authorization: `Bearer ${token}`
+        
+      })
+  
+      const user = response.data;
+      console.log(user)
+      alert(user)
+
+}
 
 export default function SignIn() {
+
+  useEffect(() => {
+    holder()
+  }, []);
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 

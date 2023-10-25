@@ -16,16 +16,16 @@ import useSignUp from '../../hooks/api/useSignUp';
 import GitButton from '../../components/Form/GitButton';
 import axios from 'axios';
 
+
 window.onload = async () => {
   const urlParams = new URLSearchParams(window.location.search);
   const code = urlParams.get("code");
-  console.log(code)
+  alert(code)
   if(code){
     try {
       const response = await axios.post(`http://localhost:4000/auth/login-git`, {code});
-      const {token} = response.data;
-      localStorage.setItem('token', JSON.stringify(response.data));
-      window.location.href = "http://localhost:5173/dashboard/subscription"
+      localStorage.setItem('token', response.data);
+      window.location.href = "http://localhost:5173/sign-in"
     } catch (error) {
       console.log(error)
     }

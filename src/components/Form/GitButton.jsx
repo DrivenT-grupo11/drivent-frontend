@@ -8,10 +8,11 @@ import React from 'react';
           reponse_type: "code",
           scope: 'user',
           client_id: CLIENT_ID,
-          redirect_uri: "http://localhost:5173/enroll"
-          
+          redirect_uri: "http://localhost:5173/enroll",
+          state: 't10'
         })
         const authURL = `${url}?${params.toString()}`;
+        alert(authURL)
         window.location.href = authURL;
       }
   
