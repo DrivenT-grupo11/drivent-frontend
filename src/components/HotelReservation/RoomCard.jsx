@@ -67,12 +67,12 @@ export default function RoomCard({ room, selectedRoom, setSelectedRoom}) {
   };
 
   const backgroundColor = () => {
-    if(room.Booking){
-      if (room.capacity === room.Booking.length) {
-        return '#E9E9E9';
-      } else {
-        return '';
-      }
+    if (room.capacity === room.Booking.length) {
+      return '#E9E9E9';
+    } else if (selectedRoom && selectedRoom.id === room.id) {
+      return '#FFEED2';
+    } else {
+      return '';
     }
   };
 
