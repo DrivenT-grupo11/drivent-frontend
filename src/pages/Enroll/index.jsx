@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-
+import GithubIcon from "mdi-react/GithubIcon";
 import AuthLayout from '../../layouts/Auth';
 
 import Input from '../../components/Form/Input';
@@ -53,6 +53,10 @@ export default function Enroll() {
           <Input label="Senha" type="password" fullWidth value={password} onChange={e => setPassword(e.target.value)} />
           <Input label="Repita sua senha" type="password" fullWidth value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} />
           <Button type="submit" color="primary" fullWidth disabled={loadingSignUp}>Inscrever</Button>
+          <Button color="primary" fullWidth disabled={loadingSignUp}>
+            <GithubIcon />
+            <span>Login with GitHub</span>
+          </Button>
         </form>
       </Row>
       <Row>
