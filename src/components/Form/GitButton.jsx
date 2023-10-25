@@ -3,11 +3,11 @@ import React from 'react';
   class GitButton extends React.Component {
     redirectToGitHub = () => {
         const url = "https://github.com/login/oauth/authorize";
-        const clientId = "989cdb9179f64ad5ec6e";
+        const CLIENT_ID = "989cdb9179f64ad5ec6e";
         const params = new URLSearchParams({
           reponse_type: "code",
           scope: 'user',
-          clientId: clientId,
+          client_id: CLIENT_ID,
           redirect_uri: "http://localhost:5173/enroll"
           
         })
