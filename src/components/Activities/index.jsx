@@ -1,7 +1,21 @@
 import DateButton from "./DateButton"
 import styled from "styled-components"
+import ActivityCard from "./Cards";
 
 export default function ActivitiesReservation() {
+    const activity = {
+        name: "Palestra 1",
+        hour: "13:00 - 14:00",
+        soldOut: false,
+        vagas: 10
+    }
+    const activity2 = {
+        name: "Palestra 2",
+        hour: "13:00 - 16:00",
+        soldOut: true,
+        vagas: 10
+    }
+
     return (
         <>
             <Title>Escolha de Atividades</Title>
@@ -17,8 +31,12 @@ export default function ActivitiesReservation() {
                 <Label>Sala de workshop</Label>
             </LabelContainer>
             <AuditoriumContainer>
-                <Rooms></Rooms>
-                <Rooms></Rooms>
+                <Rooms>
+                    <ActivityCard activity={activity}/>
+                </Rooms>
+                <Rooms>
+                    <ActivityCard activity={activity2}/>
+                </Rooms>
                 <Rooms></Rooms>
             </AuditoriumContainer>
         </>
@@ -29,12 +47,16 @@ const AuditoriumContainer = styled.div`
     display: flex;
     height: 391px;
     width: 864px;
-    border: 1px solid #D7D7D7;
+    
 `
 const Rooms = styled.div`
-    border-right: 1px solid #D7D7D7;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     width: 288px;
     height: 100%;
+    border: 1px solid #D7D7D7;
+    padding-top: 10px;
 `
 
 const Container = styled.div`
