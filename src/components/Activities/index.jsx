@@ -1,8 +1,11 @@
 import DateButton from "./DateButton"
 import styled from "styled-components"
 import ActivityCard from "./Cards";
+import { useContext } from "react";
+import PaymentContext from "../../contexts/PaymentContext";
 
 export default function ActivitiesReservation() {
+    const { payment, typeTicket } = useContext(PaymentContext);
     const activity = {
         name: "Palestra 1",
         hour: "13:00 - 14:00",
@@ -15,30 +18,33 @@ export default function ActivitiesReservation() {
         soldOut: true,
         vagas: 10
     }
-
+    console.log(typeTicket);
     return (
         <>
             <Title>Escolha de Atividades</Title>
-            <Subtitle>Primeiro, filtre pelo dia do evento:</Subtitle>
-            <Container>
-                <DateButton name = {'Sexta 22/10'}/>
-                <DateButton name = {'Sábado 23/10'}/>
-                <DateButton name = {'Domingo 24/10'}/>
-            </Container>
-            <LabelContainer>
-                <Label>Auditorio principal</Label>
-                <Label>Auditorio lateral</Label>
-                <Label>Sala de workshop</Label>
-            </LabelContainer>
-            <AuditoriumContainer>
-                <Rooms>
-                    <ActivityCard activity={activity}/>
-                </Rooms>
-                <Rooms>
-                    <ActivityCard activity={activity2}/>
-                </Rooms>
-                <Rooms></Rooms>
-            </AuditoriumContainer>
+            {typeTicket === 'Online' && payment ? <NotPayment>Sua modalidade de ingresso não necessita escolher
+                atividade. Você terá acesso a todas as atividades.</NotPayment> : !payment ? <NotPayment className="validation">Você precisa ter confirmado pagamento antes
+                    de fazer a escolha de atividades</NotPayment> : <>
+                <Subtitle>Primeiro, filtre pelo dia do evento:</Subtitle>
+                <Container>
+                    <DateButton name={'Sexta 22/10'} />
+                    <DateButton name={'Sábado 23/10'} />
+                    <DateButton name={'Domingo 24/10'} />
+                </Container>
+                <LabelContainer>
+                    <Label>Auditorio principal</Label>
+                    <Label>Auditorio lateral</Label>
+                    <Label>Sala de workshop</Label>
+                </LabelContainer>
+                <AuditoriumContainer>
+                    <Rooms>
+                        <ActivityCard activity={activity} />
+                    </Rooms>
+                    <Rooms>
+                        <ActivityCard activity={activity2} />
+                    </Rooms>
+                    <Rooms></Rooms>
+                </AuditoriumContainer> </>}
         </>
     );
 }
@@ -90,6 +96,21 @@ const LabelContainer = styled.div`
     margin-top: 40px;
 `
 const Label = styled.h3`
+ 
+    font-family: Roboto;
+    font-size: 17px;
+    font-weight: 400;
+    line-height: 20px;
+    letter-spacing: 0em;
+    text-align: center;
+    color: #7B7B7B;
+`
+const NotPayment = styled.h3`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    top:45%;
     font-family: Roboto;
     font-size: 17px;
     font-weight: 400;
