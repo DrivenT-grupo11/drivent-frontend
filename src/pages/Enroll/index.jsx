@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react';
+import React from 'react';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import GithubIcon from "mdi-react/GithubIcon";
@@ -12,6 +13,9 @@ import Link from '../../components/Link';
 import EventInfoContext from '../../contexts/EventInfoContext';
 
 import useSignUp from '../../hooks/api/useSignUp';
+import GitButton from '../../components/Form/GitButton';
+
+
 
 export default function Enroll() {
   const [email, setEmail] = useState('');
@@ -53,11 +57,13 @@ export default function Enroll() {
           <Input label="Senha" type="password" fullWidth value={password} onChange={e => setPassword(e.target.value)} />
           <Input label="Repita sua senha" type="password" fullWidth value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} />
           <Button type="submit" color="primary" fullWidth disabled={loadingSignUp}>Inscrever</Button>
-          <Button color="primary" fullWidth disabled={loadingSignUp}>
+
+          {/* <button onClick={this.redirectToGitHub} color="primary" fullWidth disabled={loadingSignUp}>
             <GithubIcon />
             <span>Login with GitHub</span>
-          </Button>
+          </button> */}
         </form>
+        <GitButton></GitButton>
       </Row>
       <Row>
         <Link to="/sign-in">Já está inscrito? Faça login</Link>
