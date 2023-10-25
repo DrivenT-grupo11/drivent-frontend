@@ -16,7 +16,7 @@ export default function TicketsPaymentInfo() {
   const enrollment = useEnrollment();
   const {userData} = useContext(UserContext);
   const { ticketType, setTicketType,ticketId, setTicketId } = useTicketType();
-  const { setPriceTicket, setHotelTicket, setTypeTicket } = useContext(PaymentContext)
+  const { setPriceTicket, setHotelTicket, setTypeTicket, payment } = useContext(PaymentContext)
   const [selectedOption1, setSelectedOption1] = useState(false);
   const [selectedOption3, setSelectedOption3] = useState(false);
   const [selectedOption2, setSelectedOption2] = useState(false);
@@ -40,11 +40,15 @@ export default function TicketsPaymentInfo() {
     } else if (selectedOption4) {
       calculatedPrice += 0;
     }
-    
     setTotal(calculatedPrice);
     setPriceTicket(calculatedPrice);
+    if (payment){
+      navigate('/dashboard/payment/checkout')
+    }
+    
+    
    
-  }, [selectedOption1, selectedOption2, selectedOption3, selectedOption4]);
+  }, [selectedOption1, selectedOption2, payment, selectedOption3, selectedOption4]);
   
   const selectedType = async () => {
     let id;
