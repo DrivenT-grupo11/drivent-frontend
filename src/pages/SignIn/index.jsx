@@ -29,8 +29,18 @@ async function holder() {
         headers: header
         
       })
-      console.log(response.data)
-      const user = response.data;
+      const user = response.data[1];
+      if(user) {
+        const userData = {
+          user: {
+            id: user.id,
+            email: user.email,
+          },
+          token
+        }
+        localStorage.setItem('userData', JSON.stringify(userData));
+        window.location.href = "http://localhost:5173/dashboard/subscription"
+      }
 
 }
 
