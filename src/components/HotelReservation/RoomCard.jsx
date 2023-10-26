@@ -6,7 +6,7 @@ export default function RoomCard({ room, selectedRoom, setSelectedRoom}) {
     const closedVacancy = room.Booking ? room.Booking.length : 0;
     let openVacancy = room.capacity - (room.Booking ? room.Booking.length : 0);
     //console.log(room)
-    console.log(selectedRoom)
+    //console.log(selectedRoom)
     if (selectedRoom) {
       if (selectedRoom.id === room.id) {
         openVacancy--;
