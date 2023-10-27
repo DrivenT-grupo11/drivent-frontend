@@ -8,7 +8,8 @@ import { toast } from 'react-toastify';
 export default function RoomListing({
   rooms,
   selectedRoom,
-  setSelectedRoom
+  setSelectedRoom,
+  getBooking,
 }) {
  //console.log(rooms)
   const { saveBookingLoading, saveBooking } = useSaveBooking();
@@ -30,10 +31,10 @@ export default function RoomListing({
   };
 
   async function bookRoom() {
-    console.log('foi')
     try {
       await saveBooking({ roomId: selectedRoom.id });
       getBooking();
+      console.log("foi")
     } catch (err) {
       toast('Não foi possível reservar o quarto!');
     }

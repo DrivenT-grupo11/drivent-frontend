@@ -1,26 +1,25 @@
 import styled from 'styled-components';
-import useHotelDetails from '../../hooks/api/useHotelDetails';
 import { useEffect, useState } from 'react';
-import { getHotelCapacity, getRoomTypes } from './hotelUtils';
+import { getHotelCapacity, getRoomTypes, getResevedRoom, getRoomOcuppancy } from './hotelUtils';
 
-export default function HotelCard({ hotel, setSelectedHotel, selectedHotel, setSelectedRoom }) {
-  const { hotelDetails } = useHotelDetails(hotel.id);
+export default function HotelCard({ hotel, setSelectedHotel, selectedHotel, setSelectedRoom, booking, resume }) {
   const [emptyVacancy, setEmptyVacancy] = useState('Carregando');
   const [roomTypes, setRoomTypes] = useState('Carregando');
 
 
   useEffect(() => {
-    if (hotel) {
+    if (hotel && !booking) {
       setEmptyVacancy(getHotelCapacity(hotel.Rooms));
       setRoomTypes(getRoomTypes(hotel.Rooms));
+    }  else if (booking.Room, "AQUI") {
+      //console.log(booking.Room)
+      setEmptyVacancy(getRoomOcuppancy(booking.Room.Booking.length));
+      setRoomTypes(getResevedRoom(booking.Room));
     }
   }, [hotel]);
 
   function selectCard() {
-    console.log('Clicou no cartão:', hotel);
-    console.log("Hotel:", hotelDetails)
     setSelectedHotel(hotel);
-    console.log("selected", selectedHotel)
     
     if (selectedHotel && hotel.id !== selectedHotel.id) {
       setSelectedRoom(null);
@@ -28,19 +27,19 @@ export default function HotelCard({ hotel, setSelectedHotel, selectedHotel, setS
   };
 
   const cardColor = () => {
-    if ((selectedHotel && selectedHotel.id === hotel.id)) {
+    if ((selectedHotel && selectedHotel.id === hotel.id || resume)) {
       return '#FFEED2';
     }
     return '#EBEBEB';
   };
-
+  //console.log(resume)
   return (
-    <HotelCOntainer onClick={selectCard} cardColor={cardColor}>
+    <HotelCOntainer onClick={resume? null : selectCard} cardColor={cardColor}>
       <Picture src={hotel.image} />
       <Name>{hotel.name}</Name>
-      <Title>{'Tipos de acomodação:'}</Title>
+      <Title>{booking ? 'Quarto reservado' : 'Tipos de acomodação:'}</Title>
       <Content>{roomTypes}</Content>
-      <Title>{'Vagas disponíveis:'}</Title>
+      <Title>{booking ? 'Pessoas no seu quarto' : 'Vagas disponíveis:'}</Title>
       <Content>{emptyVacancy}</Content>
     </HotelCOntainer>
   );

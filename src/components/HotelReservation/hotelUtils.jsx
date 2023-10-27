@@ -63,3 +63,17 @@ export function getRoomTypes(rooms) {
     return 'Não informado';
   }
 }
+
+export function getRoomOcuppancy(occupant) {
+  return `Você ${occupant > 1 ? 'e mais' : ''} ${occupant > 1 ? occupant - 1 : ''} `;
+}
+
+export function getResevedRoom(room) {
+  const capacity = {
+    1: 'Single',
+    2: 'Double',
+    3: 'Triple',
+  };
+
+  return `${room.name} (${capacity[room.capacity]})`;
+}
