@@ -11,6 +11,7 @@ import axios from "axios";
 import UserContext from "../../contexts/UserContext";
 import { useTicketType } from "../../contexts/TicketTypeContext";
 import EnrollmentContext from "../../contexts/EnrollmentContext";
+import PaymentContext from "../../contexts/PaymentContext";
 
 axios.defaults.baseURL = `${import.meta.env.VITE_API_URL}`;
 
@@ -32,7 +33,7 @@ export default function CheckoutPayment() {
   const [cardExpiry, setCardExpiry] = useState('');
   const {ticketId} = useTicketType();
   const token = useToken();
-  const [payment, setPayment] = useState(false);
+  const {payment, setPayment} = useContext(PaymentContext);
  
   const handleInputChange = (evt) => {
     const { name, value } = evt.target;
@@ -65,8 +66,9 @@ export default function CheckoutPayment() {
       setPayment(true);
       toast('Pagamento realizado com sucesso')
     } catch (error) {
+      setPayment(false)
       toast('Falha no pagamento, verifique os dados')
-      console.log(error)
+      
     }
 
   }
@@ -217,6 +219,7 @@ const CreditCard = styled.div`
       justify-content: space-between;
       .form-expiry{
           width: 65%;
+          
         }
         .form-control{
           width: 30%;

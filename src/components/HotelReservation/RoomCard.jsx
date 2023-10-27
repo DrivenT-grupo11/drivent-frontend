@@ -1,11 +1,32 @@
 import styled from 'styled-components';
 import { BsPerson, BsFillPersonFill } from 'react-icons/bs';
 
-export default function RoomCard({ room }) {
+export default function RoomCard({ room, selectedRoom, setSelectedRoom}) {
   const renderPlaces = () => {
     const closedVacancy = room.Booking ? room.Booking.length : 0;
     let openVacancy = room.capacity - (room.Booking ? room.Booking.length : 0);
-    {
+    //console.log(room)
+    //console.log(selectedRoom)
+    if (selectedRoom) {
+      if (selectedRoom.id === room.id) {
+        openVacancy--;
+      }
+      return (
+        <div>
+          {Array(openVacancy)
+            .fill()
+            .map((_, i) => (
+              <BsPerson key={i} size={'27px'} />
+            ))}
+            {selectedRoom && selectedRoom.id === room.id && <StyledReservedIcon color="#FF4791" />}
+          {Array(closedVacancy)
+            .fill()
+            .map((_, i) => (
+              <StyledReservedIcon key={i} color={iconColor} />
+            ))}
+        </div>
+      );
+    } else {
       return (
         <div>
           {Array(openVacancy)
@@ -46,18 +67,24 @@ export default function RoomCard({ room }) {
   };
 
   const backgroundColor = () => {
-    if(room.Booking){
-      if (room.capacity === room.Booking.length) {
-        return '#E9E9E9';
-      } else {
-        return '';
-      }
+    if (room.capacity === room.Booking.length) {
+      return '#E9E9E9';
+    } else if (selectedRoom && selectedRoom.id === room.id) {
+      return '#FFEED2';
+    } else {
+      return '';
+    }
+  };
+
+  const selectRoom = () => {
+    if (room.capacity !== room.Booking.length) {
+      setSelectedRoom(room);
     }
   };
 
 
   return (
-    <RoomCardContainer textColor={textColor} backgroundColor={backgroundColor}>
+    <RoomCardContainer textColor={textColor} backgroundColor={backgroundColor} onClick={selectRoom}>
       <h1>{room.name}</h1>
       {renderPlaces()}
     </RoomCardContainer>
