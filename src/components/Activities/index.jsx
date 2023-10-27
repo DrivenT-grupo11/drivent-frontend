@@ -1,56 +1,96 @@
-import DateButton from "./DateButton"
-import styled from "styled-components"
-import ActivityCard from "./Cards";
-import { useContext } from "react";
-import PaymentContext from "../../contexts/PaymentContext";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import DateButton from './DateButton';
+import styled from 'styled-components';
+import ActivityCard from './Cards';
+import { useContext } from 'react';
+import PaymentContext from '../../contexts/PaymentContext';
+import useToken from '../../hooks/useToken';
+import UserContext from '../../contexts/UserContext';
 
 export default function ActivitiesReservation() {
-    const { payment, typeTicket } = useContext(PaymentContext);
-    const activity = {
-        name: "Palestra 1",
-        hour: "13:00 - 14:00",
-        soldOut: false,
-        vagas: 10
+  const { payment, typeTicket } = useContext(PaymentContext);
+  const [activities, setActivities] = useState([]);
+  const [selectedDay, setSelectedDay] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [showActivities, setShowActivities] = useState(false);
+  const [clickedButton, setClickedButton] = useState(null);
+  const token = useToken();
+  axios.defaults.baseURL = `${import.meta.env.VITE_API_URL}`;
+
+
+  useEffect(() => {
+
+    async function fetchData() {
+      try {
+        const response = await axios.get('/activities', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setActivities(response.data);
+        console.log('data', response.data);
+     
+      } catch (error) {
+        console.log(error);
+      }
     }
-    const activity2 = {
-        name: "Palestra 2",
-        hour: "13:00 - 16:00",
-        soldOut: true,
-        vagas: 10
-    }
-    console.log(typeTicket);
-    return (
+    fetchData();
+  }, []);
+
+  function showActivitiesForDay(day) {
+    setSelectedDate(day);
+    setShowActivities(true);
+  }
+  
+
+  
+ 
+   return (
         <>
             <Title>Escolha de Atividades</Title>
-            {typeTicket === 'Online' && payment ? <NotPayment>Sua modalidade de ingresso não necessita escolher
+{/*        {typeTicket === 'Online' && payment ? <NotPayment>Sua modalidade de ingresso não necessita escolher
                 atividade. Você terá acesso a todas as atividades.</NotPayment> : !payment ? <NotPayment className="validation">Você precisa ter confirmado pagamento antes
-                    de fazer a escolha de atividades</NotPayment> : <>
-                <Subtitle>Primeiro, filtre pelo dia do evento:</Subtitle>
+                    de fazer a escolha de atividades</NotPayment> : <> */}
+               <Subtitle>Primeiro, filtre pelo dia do evento:</Subtitle>
+             
                 <Container>
-                    <DateButton name={'Sexta 22/10'} />
-                    <DateButton name={'Sábado 23/10'} />
-                    <DateButton name={'Domingo 24/10'} />
-                </Container>
+                  <DateButton
+                    onClick={() => showActivitiesForDay('27/10')}
+                    isClicked={clickedButton === '27/10'}
+                    name={'Sexta, 27/10'}
+                  />
+                  <DateButton
+                    onClick={() => showActivitiesForDay('28/10')}
+                    isClicked={clickedButton === '28/10'}
+                    name={'Sábado, 28/10'}
+                  />
+                  <DateButton
+                    onClick={() => showActivitiesForDay('29/10')}
+                    isClicked={clickedButton === '29/10'}
+                    name={'Domingo, 29/10'}
+                  />
+              </Container>
+        
                 <LabelContainer>
                     <Label>Auditorio principal</Label>
                     <Label>Auditorio lateral</Label>
                     <Label>Sala de workshop</Label>
                 </LabelContainer>
+                {showActivities && (
                 <AuditoriumContainer>
-                    <Rooms>
-                        <ActivityCard activity={activity} />
-                    </Rooms>
-                    <Rooms>
-                        <ActivityCard activity={activity2} />
-                    </Rooms>
-                    <Rooms></Rooms>
-                </AuditoriumContainer> </>}
-        </>
+                {activities.map((activity, index) => (
+                  <ActivityCard key={index} activity={activity} />
+                ))}
+              </AuditoriumContainer>
+      )} </> //} 
+/*         </> */
     );
 }
 
 const AuditoriumContainer = styled.div`
     display: flex;
+    flex-direction: column;
     height: 391px;
     width: 864px;
     

@@ -3,26 +3,29 @@ import soldOut from "../../assets/images/ant-design_close-circle-outlined.png";
 import available from "../../assets/images/pepicons_enter.png";
 
 export default function ActivityCard({ activity }) {
-    const calculateDuration = (startTime, endTime) => {
+  if (!activity) {
+    return console.log('não tem activity'); 
+  }
+
+  const calculateDuration = (startTime, endTime) => {
     const startHour = parseInt(startTime.split(":")[0]);
     const endHour = parseInt(endTime.split(":")[0]);
     return endHour - startHour;
   };
 
   const durationHours = calculateDuration(
-    activity.hour.split(" - ")[0],
-    activity.hour.split(" - ")[1]
+    activity.schedule.split("T")[1], 
+    activity.schedule.split("T")[1]
   );
 
- 
-  const heightPerHour = 79; 
+  const heightPerHour = 79;
   const cardHeight = durationHours * heightPerHour;
 
   return (
     <CardContainer style={{ height: `${cardHeight}px` }}>
       <ActivityLeft>
         <Title>{activity.name}</Title>
-        <Hour>{activity.hour}</Hour>
+    {/*   <Hour>{activity.schedule}</Hour> */}
       </ActivityLeft>
       <ActivityRight>
         <Icon src={activity.soldOut ? soldOut : available} />
