@@ -2,7 +2,9 @@ import styled from "styled-components";
 import soldOut from "../../assets/images/ant-design_close-circle-outlined.png";
 import available from "../../assets/images/pepicons_enter.png";
 
-export default function ActivityCard({ activity }) {
+export default function ActivityCard({ activity, day }) {
+  // console.log(day)
+  console.log(activity)
   if (!activity) {
     return console.log('não tem activity'); 
   }
@@ -14,23 +16,25 @@ export default function ActivityCard({ activity }) {
   };
 
   const durationHours = calculateDuration(
-    activity.schedule.split("T")[1], 
-    activity.schedule.split("T")[1]
+    activity[0].schedule.split("T")[1], 
+    activity[0].schedule.split("T")[1]
   );
 
   const heightPerHour = 79;
-  const cardHeight = durationHours * heightPerHour;
+  const cardHeight = 1 * heightPerHour;
+
+
 
   return (
     <CardContainer style={{ height: `${cardHeight}px` }}>
       <ActivityLeft>
-        <Title>{activity.name}</Title>
-    {/*   <Hour>{activity.schedule}</Hour> */}
+        <Title>{activity[0].name}</Title>
+      <Hour>{activity[0].schedule}</Hour>
       </ActivityLeft>
       <ActivityRight>
-        <Icon src={activity.soldOut ? soldOut : available} />
+       <Icon activity={activity}  src={activity[0].capacity === 0 ? soldOut : available} onClick={activity.available ? handleClick(e) : null}/> {/*TODO: implement the handleClick to reserve a activity */}
         <Status activity={activity}>
-          {activity.soldOut ? "Esgotado" : `${activity.vagas} vagas`}
+          {activity[0].capacity === 0 ? "Esgotado" : `${activity[0].capacity} vagas`}
         </Status>
       </ActivityRight>
     </CardContainer>
@@ -82,9 +86,10 @@ const ActivityRight = styled.div`
     border-left: 1px solid #CFCFCF;
 `
 const Icon = styled.img`
-    width: 20px;
-    height: 20px;
-`
+  width: 20px;
+  height: 20px;
+  cursor: ${props => (props.activity[0].capacity !== 0 ? 'pointer' : 'default')};
+`;
 const Status = styled.h1`
     font-family: Roboto;
     font-size: 9px;
@@ -93,5 +98,5 @@ const Status = styled.h1`
     letter-spacing: 0em;
     text-align: left;
     margin-top: 5px;
-    color: ${props => (props.activity.soldOut ? "#CC6666" : "#247A6B")};
+    color: ${props => (props.activity[0].capacity === 0 ? "#CC6666" : "#247A6B")};
 `;
