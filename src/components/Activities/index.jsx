@@ -11,6 +11,7 @@ import UserContext from '../../contexts/UserContext';
 export default function ActivitiesReservation() {
   const { payment, typeTicket } = useContext(PaymentContext);
   const [activities, setActivities] = useState([]);
+  const [activitiesForDate, setActivitiesForDate] = useState();
   const [selectedDay, setSelectedDay] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
   const [showActivities, setShowActivities] = useState(false);
@@ -29,7 +30,7 @@ export default function ActivitiesReservation() {
           },
         });
         setActivities(response.data);
-        console.log('data', response.data);
+        // console.log('data', response.data);
      
       } catch (error) {
         console.log(error);
@@ -41,10 +42,23 @@ export default function ActivitiesReservation() {
   function showActivitiesForDay(day) {
     setSelectedDate(day);
     setShowActivities(true);
+    const correntDay = filterActivitiesByDay(activities, day)
+    setActivitiesForDate(correntDay)
+    // console.log(a)
   }
+  
+ 
+    // activitiesForDate, setActivitiesForDate
   
 
   
+    function filterActivitiesByDay(activities, day) {
+      return activities.filter(activity => {
+        const activityDate = new Date(activity.schedule);
+        const activityDay = `${activityDate.getMonth() + 1}-${activityDate.getDate()}`;
+        return activityDay === day;
+      });
+    }
  
    return (
         <>
@@ -56,18 +70,18 @@ export default function ActivitiesReservation() {
              
                 <Container>
                   <DateButton
-                    onClick={() => showActivitiesForDay('27/10')}
-                    isClicked={clickedButton === '27/10'}
+                    onClick={() => showActivitiesForDay('10-27')}
+                    isClicked={clickedButton === '10-27'}
                     name={'Sexta, 27/10'}
                   />
                   <DateButton
-                    onClick={() => showActivitiesForDay('28/10')}
-                    isClicked={clickedButton === '28/10'}
+                    onClick={() => showActivitiesForDay('10-28')}
+                    isClicked={clickedButton === '10-28'}
                     name={'Sábado, 28/10'}
                   />
                   <DateButton
-                    onClick={() => showActivitiesForDay('29/10')}
-                    isClicked={clickedButton === '29/10'}
+                    onClick={() => showActivitiesForDay('10-29')}
+                    isClicked={clickedButton === '10-29'}
                     name={'Domingo, 29/10'}
                   />
               </Container>
@@ -79,8 +93,8 @@ export default function ActivitiesReservation() {
                 </LabelContainer>
                 {showActivities && (
                 <AuditoriumContainer>
-                {activities.map((activity, index) => (
-                  <ActivityCard key={index} activity={activity} />
+                {activitiesForDate.map((activity, index) => (
+                  <ActivityCard key={index} activity={activitiesForDate} day={selectedDate}/>
                 ))}
               </AuditoriumContainer>
       )} </> //} 
