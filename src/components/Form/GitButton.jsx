@@ -1,4 +1,6 @@
 import React from 'react';
+import GithubIcon from "mdi-react/GithubIcon";
+import styled from 'styled-components';
 
   class GitButton extends React.Component {
     redirectToGitHub = () => {
@@ -17,9 +19,17 @@ import React from 'react';
   
     render() {
       return (
-        <button onClick={this.redirectToGitHub}></button>
+        <Button onClick={this.redirectToGitHub}><GithubIcon/><p>Login with GitHub</p></Button>
       );
     }
   }
   
   export default GitButton;
+
+  const Button = styled.button`
+  margin-top: 5px;
+  width: 100%;
+  display:flex;
+  justify-content: center;
+  align-items: center
+`;

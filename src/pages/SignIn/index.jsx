@@ -14,6 +14,7 @@ import UserContext from '../../contexts/UserContext';
 
 import useSignIn from '../../hooks/api/useSignIn';
 import { useEffect } from 'react';
+import GitButton from '../../components/Form/GitButton';
 
 
 
@@ -86,6 +87,7 @@ export default function SignIn() {
           <Input label="Senha" type="password" fullWidth value={password} onChange={e => setPassword(e.target.value)} />
           <Button type="submit" color="primary" fullWidth disabled={loadingSignIn}>Entrar</Button>
         </form>
+        <GitButton />
       </Row>
       <Row>
         <Link to="/enroll">Não possui login? Inscreva-se</Link>
