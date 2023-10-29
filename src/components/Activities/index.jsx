@@ -11,7 +11,7 @@ import UserContext from '../../contexts/UserContext';
 export default function ActivitiesReservation() {
   const { payment, typeTicket } = useContext(PaymentContext);
   const [activities, setActivities] = useState([]);
-  const [activitiesForDate, setActivitiesForDate] = useState();
+  const [activitiesForDate, setActivitiesForDate] = useState([]);
   const [selectedDay, setSelectedDay] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
   const [showActivities, setShowActivities] = useState(false);
@@ -19,9 +19,7 @@ export default function ActivitiesReservation() {
   const token = useToken();
   axios.defaults.baseURL = `${import.meta.env.VITE_API_URL}`;
 
-
   useEffect(() => {
-
     async function fetchData() {
       try {
         const response = await axios.get('/activities', {
@@ -29,78 +27,92 @@ export default function ActivitiesReservation() {
             Authorization: `Bearer ${token}`,
           },
         });
-        setActivities(response.data);
-        // console.log('data', response.data);
-     
+
+        const adjustedActivities = response.data.map(activity => ({
+          id: activity.id,
+          name: activity.name,
+          description: activity.description,
+          schedule: new Date(activity.schedule),
+          duration: activity.duration,
+          location: activity.location,
+          capacity: activity.capacity,
+          createdAt: new Date(activity.createdAt), 
+          updatedAt: new Date(activity.updatedAt), 
+        }));
+
+        setActivities(adjustedActivities);
+        console.log('data', adjustedActivities);
       } catch (error) {
         console.log(error);
       }
     }
     fetchData();
-  }, []);
+  }, [token]);
 
   function showActivitiesForDay(day) {
     setSelectedDate(day);
     setShowActivities(true);
-    const correntDay = filterActivitiesByDay(activities, day)
-    setActivitiesForDate(correntDay)
-    // console.log(a)
+    const correntDay = filterActivitiesByDay(activities, day);
+    setActivitiesForDate(correntDay);
   }
-  
- 
-    // activitiesForDate, setActivitiesForDate
-  
 
-  
-    function filterActivitiesByDay(activities, day) {
-      return activities.filter(activity => {
-        const activityDate = new Date(activity.schedule);
-        const activityDay = `${activityDate.getMonth() + 1}-${activityDate.getDate()}`;
-        return activityDay === day;
-      });
-    }
- 
-   return (
+  function filterActivitiesByDay(activities, day) {
+    return activities.filter(activity => {
+      const activityDate = new Date(activity.schedule);
+      const activityDay = new Date(
+        activityDate.getFullYear(),
+        activityDate.getMonth(),
+        activityDate.getDate()
+      );
+      const selectedDate = new Date(day);
+      return activityDay.getTime() === selectedDate.getTime();
+    });
+  }
+  return (
         <>
             <Title>Escolha de Atividades</Title>
 {/*        {typeTicket === 'Online' && payment ? <NotPayment>Sua modalidade de ingresso não necessita escolher
                 atividade. Você terá acesso a todas as atividades.</NotPayment> : !payment ? <NotPayment className="validation">Você precisa ter confirmado pagamento antes
                     de fazer a escolha de atividades</NotPayment> : <> */}
                <Subtitle>Primeiro, filtre pelo dia do evento:</Subtitle>
-             
-                <Container>
-                  <DateButton
-                    onClick={() => showActivitiesForDay('10-27')}
-                    isClicked={clickedButton === '10-27'}
-                    name={'Sexta, 27/10'}
-                  />
-                  <DateButton
-                    onClick={() => showActivitiesForDay('10-28')}
-                    isClicked={clickedButton === '10-28'}
-                    name={'Sábado, 28/10'}
-                  />
-                  <DateButton
-                    onClick={() => showActivitiesForDay('10-29')}
-                    isClicked={clickedButton === '10-29'}
-                    name={'Domingo, 29/10'}
-                  />
+
+               <Container>
+                <DateButton
+                  onClick={() => showActivitiesForDay('2023-10-27T00:00:00.000Z')}
+                  isClicked={clickedButton === '2023-10-27T00:00:00.000Z'}
+                  name={'Sexta, 27/10'}
+                />
+                <DateButton
+                  onClick={() => showActivitiesForDay('2023-10-28T00:00:00.000Z')}
+                  isClicked={clickedButton === '2023-10-28T00:00:00.000Z'}
+                  name={'Sábado, 28/10'}
+                />
+                <DateButton
+                  onClick={() => showActivitiesForDay('2023-10-29T00:00:00.000Z')}
+                  isClicked={clickedButton === '2023-10-29T00:00:00.000Z'}
+                  name={'Domingo, 29/10'}
+                />
               </Container>
-        
-                <LabelContainer>
-                    <Label>Auditorio principal</Label>
-                    <Label>Auditorio lateral</Label>
-                    <Label>Sala de workshop</Label>
-                </LabelContainer>
-                {showActivities && (
-                <AuditoriumContainer>
+
+              <LabelContainer>
+                <Label>Auditorio principal</Label>
+                <Label>Auditorio lateral</Label>
+                <Label>Sala de workshop</Label>
+              </LabelContainer>
+              {showActivities && activitiesForDate && (
+              <AuditoriumContainer>
                 {activitiesForDate.map((activity, index) => (
-                  <ActivityCard key={index} activity={activitiesForDate} day={selectedDate}/>
+                  <ActivityCard key={index} activity={activity} day={selectedDate} />
                 ))}
               </AuditoriumContainer>
-      )} </> //} 
+            )} 
+              </> 
+              );
+              }
+ //} 
 /*         </> */
-    );
-}
+
+
 
 const AuditoriumContainer = styled.div`
     display: flex;
