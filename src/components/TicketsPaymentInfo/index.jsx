@@ -29,6 +29,7 @@ export default function TicketsPaymentInfo() {
   axios.defaults.baseURL = `${import.meta.env.VITE_API_URL}`;
   
   useEffect(() => {
+    
     let calculatedPrice = 0;
     if (selectedOption1) {
       calculatedPrice += 450;
@@ -48,7 +49,7 @@ export default function TicketsPaymentInfo() {
     
     
    
-  }, [selectedOption1, selectedOption2, payment, selectedOption3, selectedOption4]);
+  }, [selectedOption1, selectedOption2,ticketType, payment, selectedOption3, selectedOption4]);
   
   const selectedType = async () => {
     let id;

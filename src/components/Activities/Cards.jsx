@@ -1,8 +1,14 @@
 import styled from "styled-components";
 import soldOut from "../../assets/images/ant-design_close-circle-outlined.png";
 import available from "../../assets/images/pepicons_enter.png";
+import axios from "axios";
+import useToken from "../../hooks/useToken";
+import { useState } from "react";
 
+axios.defaults.baseURL = `${import.meta.env.VITE_API_URL}`;
 export default function ActivityCard({ activity, day }) {
+  const token = useToken();
+  const [isJoin, setIsJoin] = useState(false);
   if (!activity) {
     return <div>Não há atividade</div>;
   }
@@ -11,8 +17,19 @@ export default function ActivityCard({ activity, day }) {
   const heightPerHour = 79;
   const cardHeight = durationHours * heightPerHour;
 
-  const handleClick = (e) => {
-    console.log("Clique na atividade");
+  async function handleClick(){
+    try {
+      const response = await axios.post('/activities/reservation', {activityId: activity.id}, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      });
+      console.log('atividade reservada')
+      setIsJoin(true);
+    } catch (error) {
+      console.log(error.data)
+      setIsJoin(false)
+    }
   };
 
   return (
@@ -27,8 +44,8 @@ export default function ActivityCard({ activity, day }) {
           src={activity.capacity === 0 ? soldOut : available}
           onClick={activity.capacity > 0 ? handleClick : null}
         />
-        <Status activity={activity}>
-          {activity.capacity === 0 ? "Esgotado" : `${activity.capacity} vagas`}
+        <Status activity={activity} isJoin = {isJoin}>
+          {activity.capacity === 0 ? "Esgotado" : isJoin ? "Inscrito" : `${activity.capacity} vagas`}
         </Status>
       </ActivityRight>
     </CardContainer>
@@ -93,5 +110,5 @@ line-height: 11px;
 letter-spacing: 0em;
 text-align: left;
 margin-top: 5px;
-color: ${props => (props.activity[0].capacity === 0 ? "#CC6666" : "#247A6B")};
+color: ${props => (props.activity[0].capacity === 0 ? "#CC6666" : props.isJoin ? "#078632" : "#247A6B")};
 `;

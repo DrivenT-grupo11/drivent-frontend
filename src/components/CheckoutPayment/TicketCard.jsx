@@ -4,6 +4,7 @@ import PaymentContext from "../../contexts/PaymentContext"
 
 export default function TicketCard(){
     const {priceTicket, hotelTicket, typeTicket} = useContext(PaymentContext)
+    console.log(priceTicket, 'valor')
     return (
         <>
             <CardContainer>
