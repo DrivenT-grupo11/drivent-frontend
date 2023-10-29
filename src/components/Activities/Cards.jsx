@@ -1,45 +1,57 @@
 import styled from "styled-components";
 import soldOut from "../../assets/images/ant-design_close-circle-outlined.png";
 import available from "../../assets/images/pepicons_enter.png";
+import axios from "axios";
+import useToken from "../../hooks/useToken";
+import { useState } from "react";
 
+axios.defaults.baseURL = `${import.meta.env.VITE_API_URL}`;
 export default function ActivityCard({ activity, day }) {
-  // console.log(day)
-  console.log(activity)
+  const token = useToken();
+  const [isJoin, setIsJoin] = useState(false);
   if (!activity) {
-    return console.log('não tem activity'); 
+    return <div>Não há atividade</div>;
   }
 
-  const calculateDuration = (startTime, endTime) => {
-    const startHour = parseInt(startTime.split(":")[0]);
-    const endHour = parseInt(endTime.split(":")[0]);
-    return endHour - startHour;
-  };
-
-  const durationHours = calculateDuration(
-    activity[0].schedule.split("T")[1], 
-    activity[0].schedule.split("T")[1]
-  );
-
+  const durationHours = activity.duration; 
   const heightPerHour = 79;
-  const cardHeight = 1 * heightPerHour;
+  const cardHeight = durationHours * heightPerHour;
 
-
+  async function handleClick(){
+    try {
+      const response = await axios.post('/activities/reservation', {activityId: activity.id}, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      });
+      console.log('atividade reservada')
+      setIsJoin(true);
+    } catch (error) {
+      console.log(error.data)
+      setIsJoin(false)
+    }
+  };
 
   return (
     <CardContainer style={{ height: `${cardHeight}px` }}>
       <ActivityLeft>
-        <Title>{activity[0].name}</Title>
-      <Hour>{activity[0].schedule}</Hour>
+        <Title>{activity.name}</Title>
+        <Hour>{activity.schedule}</Hour>
       </ActivityLeft>
       <ActivityRight>
-       <Icon activity={activity}  src={activity[0].capacity === 0 ? soldOut : available} onClick={activity.available ? handleClick(e) : null}/> {/*TODO: implement the handleClick to reserve a activity */}
-        <Status activity={activity}>
-          {activity[0].capacity === 0 ? "Esgotado" : `${activity[0].capacity} vagas`}
+        <Icon
+          activity={activity}
+          src={activity.capacity === 0 ? soldOut : available}
+          onClick={activity.capacity > 0 ? handleClick : null}
+        />
+        <Status activity={activity} isJoin = {isJoin}>
+          {activity.capacity === 0 ? "Esgotado" : isJoin ? "Inscrito" : `${activity.capacity} vagas`}
         </Status>
       </ActivityRight>
     </CardContainer>
   );
 }
+
 
 const CardContainer = styled.div`
   display: flex;
@@ -91,12 +103,12 @@ const Icon = styled.img`
   cursor: ${props => (props.activity[0].capacity !== 0 ? 'pointer' : 'default')};
 `;
 const Status = styled.h1`
-    font-family: Roboto;
-    font-size: 9px;
-    font-weight: 400;
-    line-height: 11px;
-    letter-spacing: 0em;
-    text-align: left;
-    margin-top: 5px;
-    color: ${props => (props.activity[0].capacity === 0 ? "#CC6666" : "#247A6B")};
+font-family: Roboto;
+font-size: 9px;
+font-weight: 400;
+line-height: 11px;
+letter-spacing: 0em;
+text-align: left;
+margin-top: 5px;
+color: ${props => (props.activity[0].capacity === 0 ? "#CC6666" : props.isJoin ? "#078632" : "#247A6B")};
 `;
