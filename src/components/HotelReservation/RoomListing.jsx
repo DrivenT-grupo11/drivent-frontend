@@ -4,15 +4,21 @@ import { RoomsContainer } from './RoomsContainer';
 import RoomCard from './RoomCard';
 import useSaveBooking from '../../hooks/api/useSaveBooking';
 import { toast } from 'react-toastify';
+import useUpdateBooking from '../../hooks/api/useUpdateRoom';
 
 export default function RoomListing({
   rooms,
   selectedRoom,
   setSelectedRoom,
+  changingRoom,
+  setChangingRoom,
   getBooking,
+  setSelectedHotel
 }) {
  //console.log(rooms)
   const { saveBookingLoading, saveBooking } = useSaveBooking();
+  const { updateBookingLoading, updateBooking } = useUpdateBooking();
+  console.log(updateBookingLoading, saveBookingLoading)
 
   const renderRoomList = () => {
     if (rooms) {
@@ -34,11 +40,25 @@ export default function RoomListing({
     try {
       await saveBooking({ roomId: selectedRoom.id });
       getBooking();
-      console.log("foi")
     } catch (err) {
       toast('Não foi possível reservar o quarto!');
     }
   }
+
+  async function changeRoom() {
+    try {
+      await updateBooking({ roomId: selectedRoom.id }, selectedRoom.capacity);
+      getBooking();
+      setChangingRoom(false);
+      setSelectedHotel(null);
+      setSelectedRoom(null);
+      // window.location.reload()
+    } catch (err) {
+      toast('Não foi possível alterar o quarto!');
+    }
+  }
+  //atualizar o quarto reservado sem reload
+  getBooking()
 
   return (
     <>
@@ -48,8 +68,8 @@ export default function RoomListing({
       <RoomsContainer>{renderRoomList()}</RoomsContainer>
       {selectedRoom ? (
         <ReserveRoomButton
-          disabled={saveBookingLoading}
-          onClick={bookRoom}
+          disabled={saveBookingLoading || updateBookingLoading}
+          onClick={changingRoom ? changeRoom : bookRoom}
         >
           RESERVAR QUARTO
         </ReserveRoomButton>
@@ -70,4 +90,5 @@ const ReserveRoomButton = styled.button`
   box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.25);
   margin-top: 40px;
   border: none;
+  cursor: pointer;
 `;
