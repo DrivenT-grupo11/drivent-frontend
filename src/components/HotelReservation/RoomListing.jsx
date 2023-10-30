@@ -53,7 +53,7 @@ export default function RoomListing({
       setChangingRoom(false);
       setSelectedHotel(null);
       setSelectedRoom(null);
-      window.location.reload();
+      // window.location.reload();
     } catch (err) {
       toast('Não foi possível alterar o quarto!');
     }
