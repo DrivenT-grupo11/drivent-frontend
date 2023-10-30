@@ -7,6 +7,7 @@ import HotelListing from './HotelListing';
 import RoomListing from './RoomListing';
 import useBooking from '../../hooks/api/useBooking';
 import BookingResume from './BookinngResume';
+import useEnrollment from '../../hooks/api/useEnrollment';
 
 export default function HotelReservation() {
   
@@ -14,13 +15,14 @@ export default function HotelReservation() {
   const [selectedHotel, setSelectedHotel] = useState(null);
   const [selectedRoom, setSelectedRoom] = useState(null);
   const { booking, getBooking } = useBooking();
+  const [changingRoom, setChangingRoom] = useState(false);
 
   //console.log(hotel.hotels)
 
   function hotelsContent(){ 
     if (hotel.hotelsError) {
       return <BlockedBooking error={hotel.hotelsError} />;
-    } else if (!hotel.hotelsError && !booking){
+    } else if ((!hotel.hotelsError && !booking) || changingRoom){
       return (
         <>
           <HotelListing
@@ -36,6 +38,8 @@ export default function HotelReservation() {
               setSelectedRoom={setSelectedRoom}
               setSelectedHotel={setSelectedHotel}
               getBooking={getBooking}
+              changingRoom={changingRoom}
+              setChangingRoom={setChangingRoom}
             />
           ) : null}
         </>
@@ -44,7 +48,7 @@ export default function HotelReservation() {
       if (hotel.hotels) {
         const reservedHotel = hotel.hotels.find((hotel) => hotel.id === booking.Room.hotelId);
 
-        return <BookingResume hotel={reservedHotel} booking={booking} />;
+        return <BookingResume hotel={reservedHotel} booking={booking} setChangingRoom={setChangingRoom}/>;
       }
     }
   }

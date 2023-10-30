@@ -6,14 +6,13 @@ export default function HotelCard({ hotel, setSelectedHotel, selectedHotel, setS
   const [emptyVacancy, setEmptyVacancy] = useState('Carregando');
   const [roomTypes, setRoomTypes] = useState('Carregando');
 
-
   useEffect(() => {
     if (hotel && !booking) {
       setEmptyVacancy(getHotelCapacity(hotel.Rooms));
       setRoomTypes(getRoomTypes(hotel.Rooms));
-    }  else if (booking.Room, "AQUI") {
+    }  else if (booking) {
       //console.log(booking.Room)
-      setEmptyVacancy(getRoomOcuppancy(booking.Room.Booking.length));
+      setEmptyVacancy(getRoomOcuppancy(booking.Room.Booking.length, booking));
       setRoomTypes(getResevedRoom(booking.Room));
     }
   }, [hotel]);

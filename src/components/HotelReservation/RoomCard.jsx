@@ -51,8 +51,6 @@ export default function RoomCard({ room, selectedRoom, setSelectedRoom}) {
       } else {
         return '#000000';
       }
-    } else {
-      return '#000000'; 
     }
   };
 

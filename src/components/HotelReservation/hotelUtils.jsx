@@ -64,7 +64,9 @@ export function getRoomTypes(rooms) {
   }
 }
 
-export function getRoomOcuppancy(occupant) {
+export function getRoomOcuppancy(occupant, booking) {
+  console.log("booking: ", booking)
+  console.log("ocupantes: ", occupant)
   return `Você ${occupant > 1 ? 'e mais' : ''} ${occupant > 1 ? occupant - 1 : ''} `;
 }
 
