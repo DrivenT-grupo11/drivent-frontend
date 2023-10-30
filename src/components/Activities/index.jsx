@@ -55,6 +55,15 @@ export default function ActivitiesReservation() {
     const correntDay = filterActivitiesByDay(activities, day);
     setActivitiesForDate(correntDay);
   }
+  function showActivitiesForDay(day) {
+    setSelectedDate(day);
+    setShowActivities(true);
+     
+    const formattedSelectedDate = new Date(day).toISOString().split('T')[0];
+    
+    const filteredActivities = filterActivitiesByDay(activities, formattedSelectedDate);
+    setActivitiesForDate(filteredActivities);
+  }
 
   function filterActivitiesByDay(activities, day) {
     return activities.filter(activity => {
