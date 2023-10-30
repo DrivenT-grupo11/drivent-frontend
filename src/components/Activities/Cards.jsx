@@ -7,6 +7,8 @@ import { useState } from "react";
 
 axios.defaults.baseURL = `${import.meta.env.VITE_API_URL}`;
 export default function ActivityCard({ activity, day }) {
+    console.log(day)
+    console.log(activity, "sapo")
   const token = useToken();
   const [isJoin, setIsJoin] = useState(false);
   if (!activity) {
@@ -35,17 +37,17 @@ export default function ActivityCard({ activity, day }) {
   return (
     <CardContainer style={{ height: `${cardHeight}px` }}>
       <ActivityLeft>
-        <Title>{activity.name}</Title>
-        <Hour>{activity.schedule}</Hour>
+        <Title>{activity[0].name}</Title>
+        <Hour>{activity[0].schedule}</Hour>
       </ActivityLeft>
       <ActivityRight>
         <Icon
           activity={activity}
-          src={activity.capacity === 0 ? soldOut : available}
-          onClick={activity.capacity > 0 ? handleClick : null}
+          src={activity[0].capacity === 0 ? soldOut : available}
+          onClick={activity[0].capacity > 0 ? handleClick : null}
         />
         <Status activity={activity} isJoin = {isJoin}>
-          {activity.capacity === 0 ? "Esgotado" : isJoin ? "Inscrito" : `${activity.capacity} vagas`}
+          {activity[0].capacity === 0 ? "Esgotado" : isJoin ? "Inscrito" : `${activity[0].capacity} vagas`}
         </Status>
       </ActivityRight>
     </CardContainer>

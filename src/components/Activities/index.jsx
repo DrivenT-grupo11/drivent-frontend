@@ -27,21 +27,21 @@ export default function ActivitiesReservation() {
             Authorization: `Bearer ${token}`,
           },
         });
+        setActivities(response.data);
+        // const adjustedActivities = response.data.map(activity => ({
+        //   id: activity.id,
+        //   name: activity.name,
+        //   description: activity.description,
+        //   schedule: new Date(activity.schedule),
+        //   duration: activity.duration,
+        //   location: activity.location,
+        //   capacity: activity.capacity,
+        //   createdAt: new Date(activity.createdAt), 
+        //   updatedAt: new Date(activity.updatedAt), 
+        // }));
 
-        const adjustedActivities = response.data.map(activity => ({
-          id: activity.id,
-          name: activity.name,
-          description: activity.description,
-          schedule: new Date(activity.schedule),
-          duration: activity.duration,
-          location: activity.location,
-          capacity: activity.capacity,
-          createdAt: new Date(activity.createdAt), 
-          updatedAt: new Date(activity.updatedAt), 
-        }));
-
-        setActivities(adjustedActivities);
-        console.log('data', adjustedActivities);
+        // setActivities(adjustedActivities);
+        // console.log('data', adjustedActivities);
       } catch (error) {
         console.log(error);
       }
@@ -68,15 +68,23 @@ export default function ActivitiesReservation() {
   function filterActivitiesByDay(activities, day) {
     return activities.filter(activity => {
       const activityDate = new Date(activity.schedule);
-      const activityDay = new Date(
-        activityDate.getFullYear(),
-        activityDate.getMonth(),
-        activityDate.getDate()
-      );
-      const selectedDate = new Date(day);
-      return activityDay.getTime() === selectedDate.getTime();
+      const activityDay = `${activityDate.getMonth() + 1}-${activityDate.getDate()}`;
+      return activityDay === day;
     });
   }
+
+  // function filterActivitiesByDay(activities, day) {
+  //   return activities.filter(activity => {
+  //     const activityDate = new Date(activity.schedule);
+  //     const activityDay = new Date(
+  //       activityDate.getFullYear(),
+  //       activityDate.getMonth(),
+  //       activityDate.getDate()
+  //     );
+  //     const selectedDate = new Date(day);
+  //     return activityDay.getTime() === selectedDate.getTime();
+  //   });
+  // }
   return (
         <>
             <Title>Escolha de Atividades</Title>
@@ -111,7 +119,7 @@ export default function ActivitiesReservation() {
               {showActivities && activitiesForDate && (
               <AuditoriumContainer>
                 {activitiesForDate.map((activity, index) => (
-                  <ActivityCard key={index} activity={activity} day={selectedDate} />
+                  <ActivityCard key={index} activity={activitiesForDate} day={selectedDate} />
                 ))}
               </AuditoriumContainer>
             )} 
