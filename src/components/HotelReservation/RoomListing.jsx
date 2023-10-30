@@ -5,6 +5,7 @@ import RoomCard from './RoomCard';
 import useSaveBooking from '../../hooks/api/useSaveBooking';
 import { toast } from 'react-toastify';
 import useUpdateBooking from '../../hooks/api/useUpdateRoom';
+import { useEffect } from 'react';
 
 export default function RoomListing({
   rooms,
@@ -18,7 +19,7 @@ export default function RoomListing({
  //console.log(rooms)
   const { saveBookingLoading, saveBooking } = useSaveBooking();
   const { updateBookingLoading, updateBooking } = useUpdateBooking();
-  console.log(updateBookingLoading, saveBookingLoading)
+  //console.log(updateBookingLoading, saveBookingLoading)
 
   const renderRoomList = () => {
     if (rooms) {
@@ -52,13 +53,11 @@ export default function RoomListing({
       setChangingRoom(false);
       setSelectedHotel(null);
       setSelectedRoom(null);
-      // window.location.reload()
+      window.location.reload();
     } catch (err) {
       toast('Não foi possível alterar o quarto!');
     }
   }
-  //atualizar o quarto reservado sem reload
-  getBooking()
 
   return (
     <>
