@@ -1,7 +1,7 @@
 import { useState, useContext } from 'react';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-
+import axios from 'axios';
 import AuthLayout from '../../layouts/Auth';
 
 import Input from '../../components/Form/Input';
@@ -13,8 +13,44 @@ import EventInfoContext from '../../contexts/EventInfoContext';
 import UserContext from '../../contexts/UserContext';
 
 import useSignIn from '../../hooks/api/useSignIn';
+import { useEffect } from 'react';
+import GitButton from '../../components/Form/GitButton';
+
+
+
+
+async function holder() {
+    const token = localStorage.getItem("token")
+
+    const header =  {
+      'Authorization': `Bearer ${token}`
+    }
+
+      const response = await axios.get("http://localhost:4000/auth/gitprofile", {
+        headers: header
+        
+      })
+      const user = response.data[1];
+      if(user) {
+        const userData = {
+          user: {
+            id: user.id,
+            email: user.email,
+          },
+          token
+        }
+        localStorage.setItem('userData', JSON.stringify(userData));
+        window.location.href = "http://localhost:5173/dashboard/subscription"
+      }
+
+}
 
 export default function SignIn() {
+
+  useEffect(() => {
+    holder()
+  }, []);
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -51,6 +87,7 @@ export default function SignIn() {
           <Input label="Senha" type="password" fullWidth value={password} onChange={e => setPassword(e.target.value)} />
           <Button type="submit" color="primary" fullWidth disabled={loadingSignIn}>Entrar</Button>
         </form>
+        <GitButton />
       </Row>
       <Row>
         <Link to="/enroll">Não possui login? Inscreva-se</Link>

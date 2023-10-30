@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
+import React from 'react';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-
 import AuthLayout from '../../layouts/Auth';
 
 import Input from '../../components/Form/Input';
@@ -12,6 +12,25 @@ import Link from '../../components/Link';
 import EventInfoContext from '../../contexts/EventInfoContext';
 
 import useSignUp from '../../hooks/api/useSignUp';
+import GitButton from '../../components/Form/GitButton';
+import axios from 'axios';
+
+
+window.onload = async () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const code = urlParams.get("code");
+  if(code){
+    try {
+      const response = await axios.post(`http://localhost:4000/auth/login-git`, {code});
+      localStorage.setItem('token', response.data);
+      window.location.href = "http://localhost:5173/sign-in"
+    } catch (error) {
+      console.log(error)
+    }
+  } else {
+
+  }
+}
 
 export default function Enroll() {
   const [email, setEmail] = useState('');
@@ -54,6 +73,7 @@ export default function Enroll() {
           <Input label="Repita sua senha" type="password" fullWidth value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} />
           <Button type="submit" color="primary" fullWidth disabled={loadingSignUp}>Inscrever</Button>
         </form>
+        <GitButton />
       </Row>
       <Row>
         <Link to="/sign-in">Já está inscrito? Faça login</Link>
