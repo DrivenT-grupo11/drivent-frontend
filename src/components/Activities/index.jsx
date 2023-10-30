@@ -86,11 +86,13 @@ export default function ActivitiesReservation() {
   //   });
   // }
   return (
-        <>
+    // typeTicket === 'Online' && payment ? <NotPayment>Sua modalidade de ingresso não necessita escolher
+    // atividade. Você terá acesso a todas as atividades.</NotPayment> : !payment ? <NotPayment className="validation">Você precisa ter confirmado pagamento antes
+    //     de fazer a escolha de atividades</NotPayment> : 
+    <> 
+
             <Title>Escolha de Atividades</Title>
-{/*        {typeTicket === 'Online' && payment ? <NotPayment>Sua modalidade de ingresso não necessita escolher
-                atividade. Você terá acesso a todas as atividades.</NotPayment> : !payment ? <NotPayment className="validation">Você precisa ter confirmado pagamento antes
-                    de fazer a escolha de atividades</NotPayment> : <> */}
+
                <Subtitle>Primeiro, filtre pelo dia do evento:</Subtitle>
 
                <Container>
@@ -128,8 +130,7 @@ export default function ActivitiesReservation() {
               </> 
               );
               }
- //} 
-/*         </> */
+
 
 
 
