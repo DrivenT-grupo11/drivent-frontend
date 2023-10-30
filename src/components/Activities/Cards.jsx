@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import soldOut from "../../assets/images/ant-design_close-circle-outlined.png";
 import available from "../../assets/images/pepicons_enter.png";
+import check from "../../assets/images/checkmark.png";
 import axios from "axios";
 import useToken from "../../hooks/useToken";
 import { useState } from "react";
@@ -40,7 +41,7 @@ export default function ActivityCard({ activity, day, key}) {
 
   return (
     <>
-    <CardContainer style={{ height: `${cardHeight}px` }}>
+    <CardContainer isJoin = {isJoin} style={{ height: `${cardHeight}px` }}>
       <ActivityLeft>
         <Title>{activity.name}</Title>
         <Hour>{inicialTime} - {finalTime}</Hour>
@@ -48,7 +49,7 @@ export default function ActivityCard({ activity, day, key}) {
       <ActivityRight>
         <Icon
           activity={activity}
-          src={activity.capacity === 0 ? soldOut : available}
+          src={isJoin ? check : (activity.capacity === 0 ? soldOut : available)}
           onClick={activity.capacity > 0 ? handleClick : null}
         />
         <Status activity={activity} isJoin = {isJoin}>
@@ -66,9 +67,9 @@ const CardContainer = styled.div`
   display: flex;
   width: 265px;
   border-radius: 5px;
-  background-color: #F1F1F1;
   border-top: 20px;
   padding: 10px;
+  background-color: ${props => (props.isJoin ? "#D0FFDB" : "#F1F1F1")};
 `;
 const Title = styled.h1`
     font-family: Roboto;
