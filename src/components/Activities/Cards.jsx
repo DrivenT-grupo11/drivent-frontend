@@ -4,11 +4,15 @@ import available from "../../assets/images/pepicons_enter.png";
 import axios from "axios";
 import useToken from "../../hooks/useToken";
 import { useState } from "react";
+import somarHoras from "../../utils/date";
 
 axios.defaults.baseURL = `${import.meta.env.VITE_API_URL}`;
-export default function ActivityCard({ activity, day }) {
-    console.log(day)
-    console.log(activity, "sapo")
+export default function ActivityCard({ activity, day, key}) {
+  const duration = (activity.duration * 60);
+  const dateString = activity.schedule;
+  const inicialTime = dateString.split("T")[1].split(":").slice(0, 2).join(":");
+  const finalTime = somarHoras(inicialTime, duration)
+
   const token = useToken();
   const [isJoin, setIsJoin] = useState(false);
   if (!activity) {
@@ -35,22 +39,25 @@ export default function ActivityCard({ activity, day }) {
   };
 
   return (
+    <>
     <CardContainer style={{ height: `${cardHeight}px` }}>
       <ActivityLeft>
-        <Title>{activity[0].name}</Title>
-        <Hour>{activity[0].schedule}</Hour>
+        <Title>{activity.name}</Title>
+        <Hour>{inicialTime} - {finalTime}</Hour>
       </ActivityLeft>
       <ActivityRight>
         <Icon
           activity={activity}
-          src={activity[0].capacity === 0 ? soldOut : available}
-          onClick={activity[0].capacity > 0 ? handleClick : null}
+          src={activity.capacity === 0 ? soldOut : available}
+          onClick={activity.capacity > 0 ? handleClick : null}
         />
         <Status activity={activity} isJoin = {isJoin}>
-          {activity[0].capacity === 0 ? "Esgotado" : isJoin ? "Inscrito" : `${activity[0].capacity} vagas`}
+          {activity.capacity === 0 ? "Esgotado" : isJoin ? "Inscrito" : `${activity.capacity} vagas`}
         </Status>
       </ActivityRight>
     </CardContainer>
+    
+    </>
   );
 }
 
@@ -102,7 +109,7 @@ const ActivityRight = styled.div`
 const Icon = styled.img`
   width: 20px;
   height: 20px;
-  cursor: ${props => (props.activity[0].capacity !== 0 ? 'pointer' : 'default')};
+  cursor: ${props => (props.activity.capacity !== 0 ? 'pointer' : 'default')};
 `;
 const Status = styled.h1`
 font-family: Roboto;
@@ -112,5 +119,5 @@ line-height: 11px;
 letter-spacing: 0em;
 text-align: left;
 margin-top: 5px;
-color: ${props => (props.activity[0].capacity === 0 ? "#CC6666" : props.isJoin ? "#078632" : "#247A6B")};
+color: ${props => (props.activity.capacity === 0 ? "#CC6666" : props.isJoin ? "#078632" : "#247A6B")};
 `;

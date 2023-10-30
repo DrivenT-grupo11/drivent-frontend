@@ -118,11 +118,13 @@ export default function ActivitiesReservation() {
               </LabelContainer>
               {showActivities && activitiesForDate && (
               <AuditoriumContainer>
-                {activitiesForDate.map((activity, index) => (
-                  <ActivityCard key={index} activity={activitiesForDate} day={selectedDate} />
-                ))}
+                <A>
+                  {activitiesForDate.map((activity, index) => (
+                    <ActivityCard key={index} activity={activity} day={selectedDate} />
+                  ))}
+                </A>
               </AuditoriumContainer>
-            )} 
+            )}
               </> 
               );
               }
@@ -131,13 +133,19 @@ export default function ActivitiesReservation() {
 
 
 
+const A = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+`
+
 const AuditoriumContainer = styled.div`
     display: flex;
     flex-direction: column;
     height: 391px;
     width: 864px;
-    
 `
+
 const Rooms = styled.div`
     display: flex;
     flex-direction: column;
