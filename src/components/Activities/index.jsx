@@ -55,15 +55,15 @@ export default function ActivitiesReservation() {
     const correntDay = filterActivitiesByDay(activities, day);
     setActivitiesForDate(correntDay);
   }
-  function showActivitiesForDay(day) {
-    setSelectedDate(day);
-    setShowActivities(true);
+  // function showActivitiesForDay(day) {
+  //   setSelectedDate(day);
+  //   setShowActivities(true);
      
-    const formattedSelectedDate = new Date(day).toISOString().split('T')[0];
+  //   const formattedSelectedDate = new Date(day).toISOString().split('T')[0];
     
-    const filteredActivities = filterActivitiesByDay(activities, formattedSelectedDate);
-    setActivitiesForDate(filteredActivities);
-  }
+  //   const filteredActivities = filterActivitiesByDay(activities, formattedSelectedDate);
+  //   setActivitiesForDate(filteredActivities);
+  // }
 
   function filterActivitiesByDay(activities, day) {
     return activities.filter(activity => {
@@ -86,21 +86,21 @@ export default function ActivitiesReservation() {
                <Subtitle>Primeiro, filtre pelo dia do evento:</Subtitle>
 
                <Container>
-                <DateButton
-                  onClick={() => showActivitiesForDay('2023-10-27T00:00:00.000Z')}
-                  isClicked={clickedButton === '2023-10-27T00:00:00.000Z'}
-                  name={'Sexta, 27/10'}
-                />
-                <DateButton
-                  onClick={() => showActivitiesForDay('2023-10-28T00:00:00.000Z')}
-                  isClicked={clickedButton === '2023-10-28T00:00:00.000Z'}
-                  name={'Sábado, 28/10'}
-                />
-                <DateButton
-                  onClick={() => showActivitiesForDay('2023-10-29T00:00:00.000Z')}
-                  isClicked={clickedButton === '2023-10-29T00:00:00.000Z'}
-                  name={'Domingo, 29/10'}
-                />
+               <DateButton
+                    onClick={() => showActivitiesForDay('10-30')}
+                    isClicked={clickedButton === '10-30'}
+                    name={'Segunda, 30/10'}
+                  />
+                  <DateButton
+                    onClick={() => showActivitiesForDay('10-31')}
+                    isClicked={clickedButton === '10-31'}
+                    name={'Terça, 31/10'}
+                  />
+                  <DateButton
+                    onClick={() => showActivitiesForDay('11-01')}
+                    isClicked={clickedButton === '11-01'}
+                    name={'Quarta, 01/11'}
+                  />
               </Container>
 
               <LabelContainer>
